@@ -54,10 +54,10 @@ class ContactsTest extends TestCase
         $response = $contacts->count(config('email-chef.list_id'));
 
         $this->assertInstanceOf(CountContactEntity::class, $response);
-        $this->assertIsInt($response->active);
-        $this->assertIsInt($response->unsubscribed);
-        $this->assertIsInt($response->bounced);
-        $this->assertIsInt($response->reported);
+        $this->assertIsString($response->active);
+        $this->assertIsString($response->unsubscribed);
+        $this->assertIsString($response->bounced);
+        $this->assertIsString($response->reported);
     }
 
     /**

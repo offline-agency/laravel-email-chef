@@ -43,7 +43,7 @@ class ListsApi extends Api
     }
 
     public function getInstance(
-        int $id
+        string $id
     ) {
         $response = $this->get('lists/'.$id, [
             'id' => $id,
@@ -97,7 +97,7 @@ class ListsApi extends Api
     }
 
     public function create(
-        array $instance_in
+        array $instance_in = []
     ) {
         $validator = Validator::make($instance_in, [
             'list_name' => 'required',
@@ -123,7 +123,7 @@ class ListsApi extends Api
 
     public function update(
         string $list_id,
-        array $instance_in
+        array $instance_in = []
     ) {
         $validator = Validator::make($instance_in, [
             'list_name' => 'required',

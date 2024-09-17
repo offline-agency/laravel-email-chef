@@ -14,7 +14,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 class ContactsApi extends Api
 {
     public function count(
-        int $list_id
+        string $list_id
     ) {
         $response = $this->get('lists/'.$list_id.'/contacts/count', [
             'list_id' => $list_id,
@@ -31,7 +31,7 @@ class ContactsApi extends Api
 
     public function getCollection(
         string $status,
-        int $list_id,
+        string $list_id,
         ?int $limit,
         ?int $offset,
         ?string $order_by,
@@ -61,8 +61,8 @@ class ContactsApi extends Api
     }
 
     public function getInstance(
-        int $contact_id,
-        int $list_id
+        string $contact_id,
+        string $list_id
     ) {
         $response = $this->get('contacts/'.$contact_id.'?list_id='.$list_id, [
             'contact_id' => $contact_id,
@@ -111,7 +111,7 @@ class ContactsApi extends Api
     }
 
     public function update(
-        int $contact_id,
+        string $contact_id,
         array $instance_in = [],
         string $mode = 'ADMIN'
     ) {
