@@ -5,7 +5,7 @@ return [
 
     'login_url' => 'https://app.emailchef.com/api/',
 
-    'username' =>  env('EMAIL_CHEF_USERNAME'),
+    'username' => env('EMAIL_CHEF_USERNAME'),
 
     'password' => env('EMAIL_CHEF_PASSWORD'),
 
