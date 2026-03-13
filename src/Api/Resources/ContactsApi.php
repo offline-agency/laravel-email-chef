@@ -129,4 +129,19 @@ class ContactsApi extends Api
 
         return new UpdatedContactEntity($contact); //to implement
     }
+
+    public function delete(
+        string $list_id,
+        string $contact_id
+    ): string|Error {
+        $response = $this->destroy(
+            'lists/'.$list_id.'/contacts/'.$contact_id
+        );
+
+        if (! $response->success) {
+            return new Error($response->data);
+        }
+
+        return 'Contact #'.$contact_id.' deleted from list #'.$list_id;
+    }
 }

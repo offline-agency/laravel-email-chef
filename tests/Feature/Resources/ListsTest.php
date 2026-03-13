@@ -5,6 +5,7 @@ namespace OfflineAgency\LaravelEmailChef\Tests\Feature\Resources;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use OfflineAgency\LaravelEmailChef\Api\Resources\ListsApi;
+use OfflineAgency\LaravelEmailChef\Entities\Error;
 use OfflineAgency\LaravelEmailChef\Entities\Lists\ContactList;
 use OfflineAgency\LaravelEmailChef\Entities\Lists\GetCollection;
 use OfflineAgency\LaravelEmailChef\Entities\Lists\GetInstance;
@@ -124,5 +125,19 @@ class ListsTest extends TestCase
         $response = $list->delete($response->list_id);
 
         $this->assertIsString($response);
+    }
+
+    public function test_subscribe()
+    {
+        $list = new ListsApi();
+
+        $response = $list->subscribe(
+            config('email-chef.list_id'),
+            config('email-chef.contact_id')
+        );
+
+        $this->assertTrue(
+            $response instanceof ContactList || $response instanceof Error
+        );
     }
 }

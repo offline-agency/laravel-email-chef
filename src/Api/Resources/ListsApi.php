@@ -158,4 +158,20 @@ class ListsApi extends Api
 
         return 'List #'.$list_id.' deleted';
     }
+
+    public function subscribe(
+        string $list_id,
+        string $contact_id
+    ): ContactList|Error {
+        $response = $this->post('lists/'.$list_id.'/subscribe', [
+            'contact_id' => $contact_id,
+            'list_id'    => $list_id,
+        ]);
+
+        if (! $response->success) {
+            return new Error($response->data);
+        }
+
+        return new ContactList($response->data);
+    }
 }

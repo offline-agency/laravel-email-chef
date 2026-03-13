@@ -10,6 +10,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Contacts\CountContactEntity;
 use OfflineAgency\LaravelEmailChef\Entities\Contacts\CreatedContactEntity;
 use OfflineAgency\LaravelEmailChef\Entities\Contacts\GetCollection;
 use OfflineAgency\LaravelEmailChef\Entities\Contacts\GetInstance;
+use OfflineAgency\LaravelEmailChef\Entities\Error;
 use OfflineAgency\LaravelEmailChef\Tests\TestCase;
 
 class ContactsTest extends TestCase
@@ -157,5 +158,28 @@ class ContactsTest extends TestCase
         );
 
         $this->assertInstanceOf(ContactsEntity::class, $response);
+    }
+
+    public function test_delete()
+    {
+        $contacts = new ContactsApi();
+
+        $created = $contacts->create([
+            'list_id'   => config('email-chef.list_id'),
+            'email'     => 'delete_test_'.time().'@example.com',
+            'firstname' => 'Delete',
+            'lastname'  => 'Test',
+        ]);
+
+        $this->assertInstanceOf(CreatedContactEntity::class, $created);
+
+        $response = $contacts->delete(
+            config('email-chef.list_id'),
+            $created->contact_id
+        );
+
+        $this->assertTrue(
+            is_string($response) || $response instanceof Error
+        );
     }
 }

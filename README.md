@@ -72,35 +72,33 @@ $contacts->count(config('email-chef.list_id'));
 
 ## API coverage
 
-We are currently work on this package to implement all endpoints. Enable notifications to be notified when new API are released.
+✅ Account
 
-❌ Account
+✅ Account infos
 
-❌ Account infos
-
-❌ Subscription
+✅ Subscription
 
 ✅ Lists
 
 ✅ Contacts
 
-❌ Predefined Fields
+✅ Predefined Fields
 
-❌ Custom Fields
+✅ Custom Fields
 
-❌ Blockings
+✅ Blockings
 
-❌ Import Tasks
+✅ Import Tasks
 
-❌ Segments
+✅ Segments
 
-❌ Campaigns
+✅ Campaigns
 
-❌ Autoresponders
+✅ Autoresponders
 
-❌ Send mail
+✅ Send mail
 
-❌ SMS
+✅ SMS
 
 ## Testing
 
