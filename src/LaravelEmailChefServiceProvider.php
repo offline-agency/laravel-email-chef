@@ -6,7 +6,7 @@ use Illuminate\Support\ServiceProvider;
 
 class LaravelEmailChefServiceProvider extends ServiceProvider
 {
-    public function boot()
+    public function boot(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -15,7 +15,7 @@ class LaravelEmailChefServiceProvider extends ServiceProvider
         }
     }
 
-    public function register()
+    public function register(): void
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(
