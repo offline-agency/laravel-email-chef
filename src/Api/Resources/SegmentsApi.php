@@ -21,7 +21,7 @@ class SegmentsApi extends Api
         string $list_id,
         ?int $limit,
         ?int $offset,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$list_id.'/segments?limit='.$limit.'&offset='.$offset, [
             'list_id' => $list_id,
             'limit'   => $limit,
@@ -44,7 +44,7 @@ class SegmentsApi extends Api
 
     public function getInstance(
         string $segment_id,
-    ) {
+    ): mixed {
         $response = $this->get('lists/108094/segments/'.$segment_id, [
             'segment_id' => $segment_id,
         ]);
@@ -64,7 +64,7 @@ class SegmentsApi extends Api
 
     public function getCount(
         string $list_id,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$list_id.'/segments/count?');
 
         if (! $response->success) {
@@ -78,7 +78,7 @@ class SegmentsApi extends Api
 
     public function getContactsCount(
         string $segment_id,
-    ) {
+    ): mixed {
         $response = $this->get('segments/'.$segment_id.'/contacts/count', [
             'segment_id' => $segment_id,
         ]);
@@ -92,10 +92,13 @@ class SegmentsApi extends Api
         return new ContactsCount($getContactsCount);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function createInstance(
         int $list_id,
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.list_id'                                       => 'required',
             'instance_in.logic'                                         => 'required',
@@ -127,11 +130,14 @@ class SegmentsApi extends Api
         return new CreateSegment($createInstance);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function updateInstance(
         string $list_id,
         string $segment_id,
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.list_id'                                       => 'required',
             'instance_in.logic'                                         => 'required',
@@ -165,7 +171,7 @@ class SegmentsApi extends Api
 
     public function deleteInstance(
         string $segment_id,
-    ) {
+    ): mixed {
         $response = $this->destroy('segments/'.$segment_id, [
             'segment_id' => $segment_id,
         ]);

@@ -17,7 +17,7 @@ class CustomFieldsApi extends Api
 {
     public function getCollection(
         string $list_id,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$list_id.'/customfields', [
             'list_id' => $list_id,
         ]);
@@ -39,7 +39,7 @@ class CustomFieldsApi extends Api
 
     public function getInstance(
         string $field_id,
-    ) {
+    ): mixed {
         $response = $this->get('customfields/'.$field_id, [
             'field_id' => $field_id,
         ]);
@@ -55,7 +55,7 @@ class CustomFieldsApi extends Api
 
     public function count(
         string $list_id,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$list_id.'/customfields/count', [
             'list_id' => $list_id,
         ]);
@@ -69,10 +69,13 @@ class CustomFieldsApi extends Api
         return new CountCustomFieldsEntity($count);
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function create(
         string $list_id,
         array $instance_in = [],
-    ) {
+    ): mixed {
         $validator = Validator::make($instance_in, [
             'data_type'     => 'string',
             'name'          => 'string',
@@ -97,10 +100,13 @@ class CustomFieldsApi extends Api
         return new CreatedCustomFieldsEntity($customfield);
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function update(
         string $field_id,
         array $instance_in = [],
-    ) {
+    ): mixed {
         $validator = Validator::make($instance_in, [
             'list_id'       => 'string',
             'name'          => 'string',
@@ -132,7 +138,7 @@ class CustomFieldsApi extends Api
 
     public function delete(
         string $field_id,
-    ) {
+    ): mixed {
         $response = $this->destroy('customfields/'.$field_id);
 
         if (! $response->success) {

@@ -10,7 +10,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 
 class AccountApi extends Api
 {
-    public function getCollection() {
+    public function getCollection(): mixed {
         $response = $this->get('accounts/current');
 
         if (! $response->success) {

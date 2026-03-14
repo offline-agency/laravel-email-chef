@@ -8,7 +8,7 @@ use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
 
 class StatusMessage extends AbstractEntity
 {
-    public $bulk_id;
+    public mixed $bulk_id;
 
     public string $message_id;
 

@@ -17,7 +17,7 @@ class ContactsApi extends Api
 {
     public function count(
         string $list_id,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$list_id.'/contacts/count', [
             'list_id' => $list_id,
         ]);
@@ -38,7 +38,7 @@ class ContactsApi extends Api
         ?int $offset,
         ?string $order_by,
         ?string $order_type,
-    ) {
+    ): mixed {
         $response = $this->get('contact?status='.$status.'&limit='.$limit.'&list_id='.$list_id.'&offset='.$offset.'&orderby='.$order_by.'&ordertype='.$order_type, [
             'status'     => $status,
             'list_id'    => $list_id,
@@ -66,7 +66,7 @@ class ContactsApi extends Api
     public function getInstance(
         string $contact_id,
         string $list_id,
-    ) {
+    ): mixed {
         $response = $this->get('contacts/'.$contact_id.'?list_id='.$list_id, [
             'contact_id' => $contact_id,
             'list_id'    => $list_id,
@@ -81,10 +81,13 @@ class ContactsApi extends Api
         return new GetInstance($contact);
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function create(
         array $instance_in = [],
         string $mode = 'ADMIN',
-    ) {
+    ): mixed {
         $validator = Validator::make($instance_in, [
             'list_id'       => 'required',
             'status'        => 'string',
@@ -113,11 +116,14 @@ class ContactsApi extends Api
         return new CreatedContactEntity($contact);
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function update(
         string $contact_id,
         array $instance_in = [],
         string $mode = 'ADMIN',
-    ) {
+    ): mixed {
         $response = $this->put('contacts/'.$contact_id, [
             'instance_in' => array_merge($instance_in, [
                 'mode' => $mode,

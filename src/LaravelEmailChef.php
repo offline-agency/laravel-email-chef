@@ -5,21 +5,22 @@ declare(strict_types=1);
 namespace OfflineAgency\LaravelEmailChef;
 
 use Exception;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
 class LaravelEmailChef
 {
-    private $username;
+    private mixed $username;
 
-    private $password;
+    private mixed $password;
 
-    protected $login_url;
+    protected mixed $login_url;
 
-    protected $baseUrl;
+    protected mixed $baseUrl;
 
-    private $authkey;
+    private mixed $authkey;
 
-    protected $header;
+    protected PendingRequest $header;
 
     public function __construct() {
         $this->setUsername();
@@ -38,7 +39,7 @@ class LaravelEmailChef
     /**
      * @throws Exception
      */
-    public function login() {
+    public function login(): void {
         $url = $this->getLoginUrl().'login';
         $username = $this->getUsername();
         $password = $this->getPassword();
@@ -64,14 +65,14 @@ class LaravelEmailChef
         $this->setAuthKey($result->authkey);
     }
 
-    private function setHeader() {
+    private function setHeader(): void {
         $this->header = Http::withHeaders([
             'Accept'  => 'application/json; charset=utf-8',
             'authkey' => $this->getAuthKey(),
         ]);
     }
 
-    private function getPassword() {
+    private function getPassword(): mixed {
         return $this->password;
     }
 
@@ -79,7 +80,7 @@ class LaravelEmailChef
         $this->password = config('email-chef.password');
     }
 
-    private function getUsername() {
+    private function getUsername(): mixed {
         return $this->username;
     }
 
@@ -87,11 +88,11 @@ class LaravelEmailChef
         $this->username = config('email-chef.username');
     }
 
-    public function getAuthKey() {
+    public function getAuthKey(): mixed {
         return $this->authkey;
     }
 
-    private function setAuthKey($authKey): void {
+    private function setAuthKey(mixed $authKey): void {
         $this->authkey = $authKey;
     }
 
@@ -99,11 +100,7 @@ class LaravelEmailChef
         $this->baseUrl = config('email-chef.baseUrl');
     }
 
-    private function getBaseUrl() {
-        return $this->baseUrl;
-    }
-
-    public function getLoginUrl() {
+    public function getLoginUrl(): mixed {
         return $this->login_url;
     }
 

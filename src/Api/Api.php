@@ -4,10 +4,14 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Api;
 
+use Illuminate\Http\Client\Response;
 use OfflineAgency\LaravelEmailChef\LaravelEmailChef;
 
 class Api extends LaravelEmailChef
 {
+    /**
+     * @param array<string, mixed> $query_parameters
+     */
     protected function get(
         string $url,
         array $query_parameters = [],
@@ -27,6 +31,9 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     protected function post(
         string $url,
         array $body,
@@ -46,6 +53,9 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     protected function put(
         string $url,
         array $body,
@@ -65,6 +75,9 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $query_parameters
+     */
     protected function destroy(
         string $url,
         array $query_parameters = [],
@@ -84,6 +97,12 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string>        $fields
+     *
+     * @return array<string, mixed>
+     */
     protected function data(
         array $data,
         array $fields,
@@ -101,7 +120,7 @@ class Api extends LaravelEmailChef
 
     private function waitThrottle(
         int $status,
-    ) {
+    ): void {
         switch ($status) {
             case 403:
                 usleep(config('email-chef.limits.403'));
@@ -115,7 +134,7 @@ class Api extends LaravelEmailChef
         }
     }
 
-    private function parseResponse($response): object {
+    private function parseResponse(Response $response): object {
         return (object) [
             'success' => $response->status() === 200,
             'data'    => json_decode($response->body()),

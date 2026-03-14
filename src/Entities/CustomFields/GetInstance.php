@@ -18,12 +18,14 @@ class GetInstance extends AbstractEntity
 
     public string $place_holder;
 
+    /** @var array<mixed>|null */
     public ?array $options;
 
     public string $default_value;
 
     public string $admin_only;
 
+    /** @var array<mixed>|null */
     public ?array $ord;
 
     public string $data_type;

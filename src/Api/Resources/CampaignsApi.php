@@ -23,7 +23,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 
 class CampaignsApi extends Api
 {
-    public function getCount() {
+    public function getCount(): mixed {
         $response = $this->get('campaigns/count');
 
         if (! $response->success) {
@@ -41,7 +41,7 @@ class CampaignsApi extends Api
         ?int $offset,
         string $orderby,
         string $ordertype,
-    ) {
+    ): mixed {
         $response = $this->get('campaigns', [
             'status'    => $status,
             'limit'     => $limit,
@@ -54,7 +54,7 @@ class CampaignsApi extends Api
             return new Error($response->data);
         }
 
-        $collections = (object) $response->data;
+        $collections = $response->data;
         $out = collect();
 
         foreach ($collections as $collection) {
@@ -66,7 +66,7 @@ class CampaignsApi extends Api
 
     public function getInstance(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->get('campaigns/'.$id);
 
         if (! $response->success) {
@@ -78,9 +78,12 @@ class CampaignsApi extends Api
         return new Campaign($getInstance);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function createInstance(
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id'                                => 'nullable',
             'instance_in.name'                              => 'required',
@@ -123,10 +126,13 @@ class CampaignsApi extends Api
         return new CreateCampaign($createInstance);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function updateInstance(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id'                                => 'nullable',
             'instance_in.name'                              => 'required',
@@ -171,7 +177,7 @@ class CampaignsApi extends Api
 
     public function deleteInstance(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->destroy('campaigns/'.$id);
 
         if (! $response->success) {
@@ -183,10 +189,13 @@ class CampaignsApi extends Api
         return new CampaignDeletion($deleteInstance);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function sendTestEmail(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id'      => 'required',
             'instance_in.command' => 'required',
@@ -208,10 +217,13 @@ class CampaignsApi extends Api
         return new SendTestEmail($sendTestEmail);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function sendCampaign(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $response = $this->post('campaigns/'.$id.'/launcher', $body);
 
         if (! $response->success) {
@@ -223,10 +235,13 @@ class CampaignsApi extends Api
         return new SendCampaign($sendCampaign);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function schedule(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $response = $this->post('campaigns/'.$id.'/launcher', $body);
 
         if (! $response->success) {
@@ -240,7 +255,7 @@ class CampaignsApi extends Api
 
     public function cancelScheduling(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->put('campaigns/'.$id.'/cancelscheduling', []);
 
         if (! $response->success) {
@@ -254,7 +269,7 @@ class CampaignsApi extends Api
 
     public function archive(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->put('campaigns/'.$id.'/archivecampaign', []);
 
         if (! $response->success) {
@@ -268,7 +283,7 @@ class CampaignsApi extends Api
 
     public function unarchive(
         string $campaign_id,
-    ) {
+    ): mixed {
         $response = $this->put('campaigns/'.$campaign_id.'/unarchivecampaign', []);
 
         if (! $response->success) {
@@ -280,9 +295,12 @@ class CampaignsApi extends Api
         return new CampaignArchiving($unarchive);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function cloning(
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id' => 'required',
         ]);
@@ -304,7 +322,7 @@ class CampaignsApi extends Api
 
     public function getLinkCollection(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->get('newsletters/'.$id.'/links');
 
         if (! $response->success) {

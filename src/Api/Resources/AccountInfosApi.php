@@ -13,7 +13,7 @@ class AccountInfosApi extends Api
 {
     public function getInstance(
         string $accountId,
-    ) {
+    ): mixed {
         $response = $this->get('account_infos/'.$accountId);
 
         if (! $response->success) {
@@ -23,9 +23,12 @@ class AccountInfosApi extends Api
         return new GetInstance($response->data);
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function update(
         array $instance_in = [],
-    ) {
+    ): mixed {
         $validator = Validator::make($instance_in, [
             'firstname'    => 'required|string',
             'lastname'     => 'required|string',

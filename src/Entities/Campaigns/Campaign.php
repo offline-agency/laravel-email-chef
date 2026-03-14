@@ -16,7 +16,7 @@ class Campaign extends AbstractEntity
 
     public string $type;
 
-    public $subject;
+    public mixed $subject;
 
     public string $html_body;
 
@@ -24,7 +24,7 @@ class Campaign extends AbstractEntity
 
     public string $sender_id;
 
-    public $template_id;
+    public mixed $template_id;
 
     public string $reply_to_id;
 
@@ -34,11 +34,12 @@ class Campaign extends AbstractEntity
 
     public string $click_count_cache;
 
-    public $ga_enabled;
+    public mixed $ga_enabled;
 
-    public $ga_campaign_title;
+    public mixed $ga_campaign_title;
 
     public object $campaign;
 
+    /** @var array<mixed> */
     public array $lists;
 }

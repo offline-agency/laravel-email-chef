@@ -18,6 +18,7 @@ class ContactsEntity extends AbstractEntity
 
     public string $place_holder;
 
+    /** @var array<mixed> */
     public array $options;
 
     public string $text;

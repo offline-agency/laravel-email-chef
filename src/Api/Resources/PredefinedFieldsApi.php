@@ -11,7 +11,7 @@ use OfflineAgency\LaravelEmailChef\Entities\PredefinedFields\PredefinedFieldsEnt
 class PredefinedFieldsApi extends Api
 {
     public function getCollection(
-    ) {
+    ): mixed {
         $response = $this->get('/predefinedfields');
 
         if (! $response->success) {

@@ -24,7 +24,7 @@ class Autoresponder extends AbstractEntity
 
     public string $sender_id;
 
-    public $template_id;
+    public mixed $template_id;
 
     public string $reply_to_id;
 
@@ -40,5 +40,6 @@ class Autoresponder extends AbstractEntity
 
     public object $autoresponder;
 
+    /** @var array<mixed> */
     public array $lists;
 }

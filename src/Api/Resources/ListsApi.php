@@ -21,7 +21,7 @@ class ListsApi extends Api
         ?int $offset,
         ?string $orderby,
         ?string $order_type,
-    ) {
+    ): mixed {
         $response = $this->get('lists?limit='.$limit.'&offset='.$offset.'&orderby='.$orderby.'&ordertype='.$order_type, [
             'limit'      => $limit,
             'offset'     => $offset,
@@ -47,7 +47,7 @@ class ListsApi extends Api
 
     public function getInstance(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$id, [
             'id' => $id,
         ]);
@@ -65,7 +65,7 @@ class ListsApi extends Api
         string $list_id,
         string $start_date,
         string $end_date,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$list_id.'/stats?start_date='.$start_date.'&end_date='.$end_date, [
             'start_date' => $start_date,
             'end_date'   => $end_date,
@@ -83,7 +83,7 @@ class ListsApi extends Api
     public function unsubscribe(
         string $list_id,
         string $contact_id,
-    ) {
+    ): mixed {
         $response = $this->get('lists/'.$list_id.'/unsubscribe?contact_id='.$contact_id.'$contact_idlist_id='.$list_id, [
             'contact_id' => $contact_id,
             'list_id'    => $list_id,
@@ -99,9 +99,12 @@ class ListsApi extends Api
         return 'Actually Contact #'.$contact_id.' is not in your list';
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function create(
         array $instance_in = [],
-    ) {
+    ): mixed {
         $validator = Validator::make($instance_in, [
             'list_name'        => 'required',
             'list_description' => 'string',
@@ -124,10 +127,13 @@ class ListsApi extends Api
         return new ContactList($list);
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function update(
         string $list_id,
         array $instance_in = [],
-    ) {
+    ): mixed {
         $validator = Validator::make($instance_in, [
             'list_name'        => 'required',
             'list_description' => 'string',
@@ -152,7 +158,7 @@ class ListsApi extends Api
 
     public function delete(
         string $list_id,
-    ) {
+    ): mixed {
         $response = $this->destroy('lists/'.$list_id);
 
         if (! $response->success) {

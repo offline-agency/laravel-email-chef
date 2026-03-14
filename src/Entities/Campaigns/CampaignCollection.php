@@ -18,9 +18,9 @@ class CampaignCollection extends AbstractEntity
 
     public string $status;
 
-    public $scheduled_time;
+    public mixed $scheduled_time;
 
-    public $send_time;
+    public mixed $send_time;
 
     public string $recipients;
 

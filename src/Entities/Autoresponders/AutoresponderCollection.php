@@ -18,11 +18,11 @@ class AutoresponderCollection extends AbstractEntity
 
     public string $hours_delay;
 
-    public $sent;
+    public mixed $sent;
 
     public string $open;
 
     public string $click;
 
-    public $lists;
+    public mixed $lists;
 }

@@ -14,7 +14,7 @@ use OfflineAgency\LaravelEmailChef\Entities\ImportTasks\GetInstance;
 class ImportTasksApi extends Api
 {
     public function getCollection(
-    ) {
+    ): mixed {
         $response = $this->get('importtasks', []);
 
         if (! $response->success) {
@@ -34,7 +34,7 @@ class ImportTasksApi extends Api
 
     public function getInstance(
         string $task_id,
-    ) {
+    ): mixed {
         $response = $this->get('importtasks/'.$task_id, [
             'task_id' => $task_id,
         ]);
@@ -48,10 +48,13 @@ class ImportTasksApi extends Api
         return new GetInstance($importtask);
     }
 
+    /**
+     * @param array<string, mixed> $instance_in
+     */
     public function create(
         string $list_id,
         array $instance_in = [],
-    ) {
+    ): mixed {
         $validator = Validator::make($instance_in, [
             'contacts'          => 'required|array',
             'notification_link' => 'string',

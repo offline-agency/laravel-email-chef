@@ -16,7 +16,7 @@ class BlockingsApi extends Api
         string $query_string,
         ?int $limit,
         ?int $offset,
-    ) {
+    ): mixed {
         $response = $this->get('blockings?$query_string='.$query_string.'&limit='.$limit.'&offset='.$offset, [
             'query_string' => $query_string,
             'limit'        => $limit,
@@ -40,7 +40,7 @@ class BlockingsApi extends Api
 
     public function count(
         string $query_string,
-    ) {
+    ): mixed {
         $response = $this->get('blockings/count?query_string='.$query_string, [
             'query_string' => $query_string,
         ]);
@@ -57,7 +57,7 @@ class BlockingsApi extends Api
     public function create(
         string $email,
         string $type,
-    ) {
+    ): mixed {
         $response = $this->post('blockings?email='.$email.'&type='.$type, []);
 
         if (! $response->success) {
@@ -71,7 +71,7 @@ class BlockingsApi extends Api
 
     public function delete(
         string $email,
-    ) {
+    ): mixed {
         $response = $this->destroy('blockings/'.$email);
 
         if (! $response->success) {

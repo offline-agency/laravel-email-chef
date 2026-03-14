@@ -13,9 +13,12 @@ use OfflineAgency\LaravelEmailChef\Entities\SMS\StatusMessage;
 
 class SMSApi extends Api
 {
+    /**
+     * @param array<string, mixed> $body
+     */
     public function send(
         array $body,
-    ) {
+    ): mixed {
         $response = $this->post('sms/send', $body);
 
         if (! $response->success) {
@@ -27,7 +30,7 @@ class SMSApi extends Api
         return new Send($send);
     }
 
-    public function getBalance() {
+    public function getBalance(): mixed {
         $response = $this->get('sms/balance');
 
         if (! $response->success) {
@@ -41,7 +44,7 @@ class SMSApi extends Api
 
     public function getStatusMessage(
         string $messageId,
-    ) {
+    ): mixed {
         $response = $this->get('sms/status/'.$messageId);
 
         if (! $response->success) {
@@ -55,7 +58,7 @@ class SMSApi extends Api
 
     public function getBulkMessageStatus(
         string $bulkId,
-    ) {
+    ): mixed {
         $response = $this->get('sms/bulk/status/'.$bulkId);
 
         if (! $response->success) {

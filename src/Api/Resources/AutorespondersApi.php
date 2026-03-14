@@ -20,7 +20,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 
 class AutorespondersApi extends Api
 {
-    public function getCount() {
+    public function getCount(): mixed {
         $response = $this->get('autoresponders/count');
 
         if (! $response->success) {
@@ -37,7 +37,7 @@ class AutorespondersApi extends Api
         ?int $offset,
         string $orderby,
         string $ordertype,
-    ) {
+    ): mixed {
         $response = $this->get('autoresponders', [
             'limit'     => $limit,
             'offset'    => $offset,
@@ -61,7 +61,7 @@ class AutorespondersApi extends Api
 
     public function getInstance(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->get('autoresponders/'.$id);
 
         if (! $response->success) {
@@ -73,9 +73,12 @@ class AutorespondersApi extends Api
         return new Autoresponder($getInstance);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function createInstance(
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id'                          => 'nullable',
             'instance_in.name'                        => 'required',
@@ -122,10 +125,13 @@ class AutorespondersApi extends Api
         return new CreateAutoresponder($create);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function updateInstance(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id'                          => 'nullable',
             'instance_in.name'                        => 'required',
@@ -174,7 +180,7 @@ class AutorespondersApi extends Api
 
     public function deleteInstance(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->destroy('newsletters/'.$id);
 
         // dd($response);
@@ -187,10 +193,13 @@ class AutorespondersApi extends Api
         return new AutoresponderDeletion($deleteInstance);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function sendTestEmail(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id'      => 'required',
             'instance_in.command' => 'required',
@@ -212,10 +221,13 @@ class AutorespondersApi extends Api
         return new SendTestEmail($sendTestEmail);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function activate(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $response = $this->put('newsletters/'.$id.'?activate=1', $body);
 
         if (! $response->success) {
@@ -227,10 +239,13 @@ class AutorespondersApi extends Api
         return new AutoresponderActivation($activate);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function deactivate(
         string $id,
         array $body,
-    ) {
+    ): mixed {
         $response = $this->put('newsletters/'.$id.'?activate=-1', $body);
 
         if (! $response->success) {
@@ -242,9 +257,12 @@ class AutorespondersApi extends Api
         return new AutoresponderActivation($deactivate);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     public function cloning(
         array $body,
-    ) {
+    ): mixed {
         $validator = Validator::make($body, [
             'instance_in.id' => 'required',
         ]);
@@ -266,7 +284,7 @@ class AutorespondersApi extends Api
 
     public function getLinksCollection(
         string $id,
-    ) {
+    ): mixed {
         $response = $this->get('newsletters/'.$id.'/links');
 
         if (! $response->success) {

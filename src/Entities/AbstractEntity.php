@@ -13,13 +13,14 @@ abstract class AbstractEntity
             return;
         }
 
-        if (is_object($parameters)) {
-            $parameters = get_object_vars($parameters);
-        }
+        $parameters = get_object_vars($parameters);
 
         $this->build($parameters);
     }
 
+    /**
+     * @param array<string, mixed> $parameters
+     */
     private function build(
         array $parameters,
     ): void {

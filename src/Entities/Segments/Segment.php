@@ -14,6 +14,7 @@ class Segment extends AbstractEntity
 
     public string $logic;
 
+    /** @var array<mixed> */
     public array $condition_groups;
 
     public string $name;

@@ -10,7 +10,9 @@ class CreatedImportTasksEntity extends AbstractEntity
 {
     public string $id;
 
+    /** @var array<mixed> */
     public array $validation_errors;
 
+    /** @var array<mixed> */
     public array $validation_warnings;
 }

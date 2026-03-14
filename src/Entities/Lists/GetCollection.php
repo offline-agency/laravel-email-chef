@@ -17,7 +17,7 @@ class GetCollection extends AbstractEntity
 
     public Carbon $date;
 
-    public $demo;
+    public mixed $demo;
 
     public string $active;
 

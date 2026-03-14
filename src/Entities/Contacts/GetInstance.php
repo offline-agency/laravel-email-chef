@@ -43,6 +43,7 @@ class GetInstance extends AbstractEntity
 
     public bool $blacklisted;
 
+    /** @var array<mixed> */
     public array $customFields;
 
     public int $rating;

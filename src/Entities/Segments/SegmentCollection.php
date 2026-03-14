@@ -18,5 +18,5 @@ class SegmentCollection extends AbstractEntity
 
     public string $total_count;
 
-    public $last_refresh_time;
+    public mixed $last_refresh_time;
 }

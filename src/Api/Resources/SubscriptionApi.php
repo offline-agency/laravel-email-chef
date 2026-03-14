@@ -10,7 +10,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Subscription\SubscriptionEntity;
 
 class SubscriptionApi extends Api
 {
-    public function getCollection() {
+    public function getCollection(): mixed {
         $response = $this->get('/subscriptions/current');
 
         if (! $response->success) {
