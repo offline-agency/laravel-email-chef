@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +16,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 class ContactsApi extends Api
 {
     public function count(
-        string $list_id
+        string $list_id,
     ) {
         $response = $this->get('lists/'.$list_id.'/contacts/count', [
             'list_id' => $list_id,
@@ -35,14 +37,14 @@ class ContactsApi extends Api
         ?int $limit,
         ?int $offset,
         ?string $order_by,
-        ?string $order_type
+        ?string $order_type,
     ) {
         $response = $this->get('contact?status='.$status.'&limit='.$limit.'&list_id='.$list_id.'&offset='.$offset.'&orderby='.$order_by.'&ordertype='.$order_type, [
-            'status' => $status,
-            'list_id' => $list_id,
-            'limit' => $limit,
-            'offset' => $offset,
-            'order_by' => $order_by,
+            'status'     => $status,
+            'list_id'    => $list_id,
+            'limit'      => $limit,
+            'offset'     => $offset,
+            'order_by'   => $order_by,
             'order_type' => $order_type,
         ]);
 
@@ -53,6 +55,7 @@ class ContactsApi extends Api
         $collections = $response->data;
         // dd(gettype($collection)); //ERROR: $collection è un array, dovrebbe essere un object <-- controllare tutte le chiamate in get
         $out = collect();
+
         foreach ($collections as $collection) {
             $out->push(new GetCollection($collection));
         }
@@ -62,11 +65,11 @@ class ContactsApi extends Api
 
     public function getInstance(
         string $contact_id,
-        string $list_id
+        string $list_id,
     ) {
         $response = $this->get('contacts/'.$contact_id.'?list_id='.$list_id, [
             'contact_id' => $contact_id,
-            'list_id' => $list_id,
+            'list_id'    => $list_id,
         ]);
 
         if (! $response->success) {
@@ -80,14 +83,14 @@ class ContactsApi extends Api
 
     public function create(
         array $instance_in = [],
-        string $mode = 'ADMIN'
+        string $mode = 'ADMIN',
     ) {
         $validator = Validator::make($instance_in, [
-            'list_id' => 'required',
-            'status' => 'string',
-            'email' => 'required',
-            'firstname' => 'string',
-            'lastname' => 'string',
+            'list_id'       => 'required',
+            'status'        => 'string',
+            'email'         => 'required',
+            'firstname'     => 'string',
+            'lastname'      => 'string',
             'custom_fields' => '',
         ]);
 
@@ -113,7 +116,7 @@ class ContactsApi extends Api
     public function update(
         string $contact_id,
         array $instance_in = [],
-        string $mode = 'ADMIN'
+        string $mode = 'ADMIN',
     ) {
         $response = $this->put('contacts/'.$contact_id, [
             'instance_in' => array_merge($instance_in, [
@@ -127,15 +130,15 @@ class ContactsApi extends Api
 
         $contact = $response->data;
 
-        return new UpdatedContactEntity($contact); //to implement
+        return new UpdatedContactEntity($contact); // to implement
     }
 
     public function delete(
         string $list_id,
-        string $contact_id
+        string $contact_id,
     ): string|Error {
         $response = $this->destroy(
-            'lists/'.$list_id.'/contacts/'.$contact_id
+            'lists/'.$list_id.'/contacts/'.$contact_id,
         );
 
         if (! $response->success) {

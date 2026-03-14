@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use Illuminate\Support\Facades\Validator;
@@ -14,7 +16,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 class CustomFieldsApi extends Api
 {
     public function getCollection(
-        string $list_id
+        string $list_id,
     ) {
         $response = $this->get('lists/'.$list_id.'/customfields', [
             'list_id' => $list_id,
@@ -27,6 +29,7 @@ class CustomFieldsApi extends Api
         $collection = $response->data;
         // dd(gettype($collection)); //ERROR: $collection è un array, dovrebbe essere un object <-- controllare tutte le chiamate in get
         $out = collect();
+
         foreach ($collection as $collectionItem) {
             $out->push(new GetCollection($collectionItem));
         }
@@ -35,7 +38,7 @@ class CustomFieldsApi extends Api
     }
 
     public function getInstance(
-        string $field_id
+        string $field_id,
     ) {
         $response = $this->get('customfields/'.$field_id, [
             'field_id' => $field_id,
@@ -51,7 +54,7 @@ class CustomFieldsApi extends Api
     }
 
     public function count(
-        string $list_id
+        string $list_id,
     ) {
         $response = $this->get('lists/'.$list_id.'/customfields/count', [
             'list_id' => $list_id,
@@ -68,12 +71,12 @@ class CustomFieldsApi extends Api
 
     public function create(
         string $list_id,
-        array $instance_in = []
+        array $instance_in = [],
     ) {
         $validator = Validator::make($instance_in, [
-            'data_type' => 'string',
-            'name' => 'string',
-            'place_holder' => 'string',
+            'data_type'     => 'string',
+            'name'          => 'string',
+            'place_holder'  => 'string',
             'default_value' => 'integer',
         ]);
 
@@ -96,18 +99,18 @@ class CustomFieldsApi extends Api
 
     public function update(
         string $field_id,
-        array $instance_in = []
+        array $instance_in = [],
     ) {
         $validator = Validator::make($instance_in, [
-            'list_id' => 'string',
-            'name' => 'string',
-            'type_id' => 'string',
-            'place_holder' => 'string',
-            'options' => 'array',
+            'list_id'       => 'string',
+            'name'          => 'string',
+            'type_id'       => 'string',
+            'place_holder'  => 'string',
+            'options'       => 'array',
             'default_value' => 'string',
-            'admin_only' => 'string',
-            'ord' => 'array',
-            'data_type' => 'string',
+            'admin_only'    => 'string',
+            'ord'           => 'array',
+            'data_type'     => 'string',
         ]);
 
         if ($validator->fails()) {
@@ -128,7 +131,7 @@ class CustomFieldsApi extends Api
     }
 
     public function delete(
-        string $field_id
+        string $field_id,
     ) {
         $response = $this->destroy('customfields/'.$field_id);
 

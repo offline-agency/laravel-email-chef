@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests\Feature\Resources;
 
 use Illuminate\Support\Collection;
@@ -15,8 +17,7 @@ use OfflineAgency\LaravelEmailChef\Tests\TestCase;
 
 class ContactsTest extends TestCase
 {
-    public function test_simple_callback()
-    {
+    public function test_simple_callback() {
         $result = Http::withHeaders([
             'Accept' => 'application/json; charset=utf-8',
         ])->post('https://app.emailchef.com/api/'.'login', [
@@ -28,14 +29,14 @@ class ContactsTest extends TestCase
 
         $response = Http::withHeaders([
             'authkey' => $result_body->authkey,
-            'Accept' => 'application/json; charset=utf-8',
+            'Accept'  => 'application/json; charset=utf-8',
         ])->post('https://app.emailchef.com/apps/api/v1/contacts', [
             'instance_in' => [
-                'list_id' => 97322,
-                'status ' => 'ACTIVE',
-                'email' => 'ciao@gmail.com',
-                'firstname' => 'Mario',
-                'lastname' => 'Rossi',
+                'list_id'       => 97322,
+                'status '       => 'ACTIVE',
+                'email'         => 'ciao@gmail.com',
+                'firstname'     => 'Mario',
+                'lastname'      => 'Rossi',
                 'custom_fields' => [
                     [
                         'test' => 'OK',
@@ -48,9 +49,8 @@ class ContactsTest extends TestCase
         $this->assertEquals(200, $response->status());
     }
 
-    public function test_get_count()
-    {
-        $contacts = new ContactsApi;
+    public function test_get_count() {
+        $contacts = new ContactsApi();
 
         $response = $contacts->count(config('email-chef.list_id'));
 
@@ -69,9 +69,8 @@ class ContactsTest extends TestCase
      * orderby: e (email), n (name), ab (added_by), s (status), at (addition_time)(default = at)
      * ordertype: a (ascending), d (descending) (default = d).
      */
-    public function test_get_collection()
-    {
-        $contacts = new ContactsApi;
+    public function test_get_collection() {
+        $contacts = new ContactsApi();
 
         $response = $contacts->getCollection(
             'ACTIVE',
@@ -79,7 +78,7 @@ class ContactsTest extends TestCase
             null,
             null,
             null,
-            null
+            null,
         );
 
         $contact = $response->first();
@@ -91,13 +90,12 @@ class ContactsTest extends TestCase
         $this->assertIsString($contact->lastname);
     }
 
-    public function test_get_instance()
-    {
-        $contacts = new ContactsApi;
+    public function test_get_instance() {
+        $contacts = new ContactsApi();
 
         $response = $contacts->getInstance(
             config('email-chef.contact_id'),
-            config('email-chef.list_id')
+            config('email-chef.list_id'),
         );
 
         $this->assertInstanceOf(GetInstance::class, $response);
@@ -118,16 +116,15 @@ class ContactsTest extends TestCase
         $this->assertIsInt($response->rating);
     }
 
-    public function test_create()
-    {
-        $contacts = new ContactsApi;
+    public function test_create() {
+        $contacts = new ContactsApi();
 
         $response = $contacts->create([
-            'list_id' => config('email-chef.list_id'),
-            'status ' => 'ACTIVE',
-            'email' => 'user12354@gmail.com',
-            'firstname' => 'Riccardo',
-            'lastname' => 'Agostini',
+            'list_id'       => config('email-chef.list_id'),
+            'status '       => 'ACTIVE',
+            'email'         => 'user12354@gmail.com',
+            'firstname'     => 'Riccardo',
+            'lastname'      => 'Agostini',
             'custom_fields' => [[
                 'test' => 'OK',
             ]],
@@ -140,28 +137,28 @@ class ContactsTest extends TestCase
         $this->assertIsBool($response->updated);
     }
 
-    public function test_update()
-    {
+    public function test_update() {
         $this->markTestIncomplete();
-        $contacts = new ContactsApi;
+        $contacts = new ContactsApi();
 
-        $response = $contacts->update('656023', [
-            'list_id' => config('email-chef.list_id'),
-            'status ' => 'ACTIVE',
-            'email' => 'mario.rossi@gmail.com',
-            'firstname' => 'Mario',
-            'lastname' => 'Rossi',
-            'custom_fields' => [[
-                'test' => 'OK',
-            ]],
-        ]
+        $response = $contacts->update(
+            '656023',
+            [
+                'list_id'       => config('email-chef.list_id'),
+                'status '       => 'ACTIVE',
+                'email'         => 'mario.rossi@gmail.com',
+                'firstname'     => 'Mario',
+                'lastname'      => 'Rossi',
+                'custom_fields' => [[
+                    'test' => 'OK',
+                ]],
+            ],
         );
 
         $this->assertInstanceOf(ContactsEntity::class, $response);
     }
 
-    public function test_delete()
-    {
+    public function test_delete() {
         $contacts = new ContactsApi();
 
         $created = $contacts->create([
@@ -175,11 +172,11 @@ class ContactsTest extends TestCase
 
         $response = $contacts->delete(
             config('email-chef.list_id'),
-            $created->contact_id
+            $created->contact_id,
         );
 
         $this->assertTrue(
-            is_string($response) || $response instanceof Error
+            is_string($response) || $response instanceof Error,
         );
     }
 }

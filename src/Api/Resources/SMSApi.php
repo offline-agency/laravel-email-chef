@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use OfflineAgency\LaravelEmailChef\Api\Api;
@@ -12,7 +14,7 @@ use OfflineAgency\LaravelEmailChef\Entities\SMS\StatusMessage;
 class SMSApi extends Api
 {
     public function send(
-        array $body
+        array $body,
     ) {
         $response = $this->post('sms/send', $body);
 
@@ -25,8 +27,7 @@ class SMSApi extends Api
         return new Send($send);
     }
 
-    public function getBalance()
-    {
+    public function getBalance() {
         $response = $this->get('sms/balance');
 
         if (! $response->success) {
@@ -39,7 +40,7 @@ class SMSApi extends Api
     }
 
     public function getStatusMessage(
-        string $messageId
+        string $messageId,
     ) {
         $response = $this->get('sms/status/'.$messageId);
 
@@ -53,7 +54,7 @@ class SMSApi extends Api
     }
 
     public function getBulkMessageStatus(
-        string $bulkId
+        string $bulkId,
     ) {
         $response = $this->get('sms/bulk/status/'.$bulkId);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Entities\Contacts;
 
 use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
@@ -7,7 +9,10 @@ use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
 class CountContactEntity extends AbstractEntity
 {
     public string $active;
+
     public string $unsubscribed;
+
     public string $bounced;
+
     public string $reported;
 }

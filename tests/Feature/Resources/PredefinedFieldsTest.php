@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests\Feature\Resources;
 
 use Illuminate\Support\Collection;
@@ -9,8 +11,7 @@ use OfflineAgency\LaravelEmailChef\Tests\TestCase;
 
 class PredefinedFieldsTest extends TestCase
 {
-    public function test_get_collection()//todo:check commented lines
-    {
+    public function test_get_collection() {// todo:check commented lines
         $predefined_fields = new PredefinedFieldsApi();
 
         $response = $predefined_fields->getCollection();

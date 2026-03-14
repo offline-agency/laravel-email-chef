@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use Illuminate\Support\Facades\Validator;
@@ -18,8 +20,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 
 class AutorespondersApi extends Api
 {
-    public function getCount()
-    {
+    public function getCount() {
         $response = $this->get('autoresponders/count');
 
         if (! $response->success) {
@@ -35,12 +36,12 @@ class AutorespondersApi extends Api
         ?int $limit,
         ?int $offset,
         string $orderby,
-        string $ordertype
+        string $ordertype,
     ) {
         $response = $this->get('autoresponders', [
-            'limit' => $limit,
-            'offset' => $offset,
-            'orderby' => $orderby,
+            'limit'     => $limit,
+            'offset'    => $offset,
+            'orderby'   => $orderby,
             'ordertype' => $ordertype,
         ]);
 
@@ -50,6 +51,7 @@ class AutorespondersApi extends Api
 
         $collections = $response->data;
         $out = collect();
+
         foreach ($collections as $collection) {
             $out->push(new AutoresponderCollection($collection));
         }
@@ -58,7 +60,7 @@ class AutorespondersApi extends Api
     }
 
     public function getInstance(
-        string $id
+        string $id,
     ) {
         $response = $this->get('autoresponders/'.$id);
 
@@ -72,37 +74,37 @@ class AutorespondersApi extends Api
     }
 
     public function createInstance(
-        array $body
+        array $body,
     ) {
         $validator = Validator::make($body, [
-            'instance_in.id' => 'nullable',
-            'instance_in.name' => 'required',
-            'instance_in.type' => 'required',
-            'instance_in.subject' => 'required',
-            'instance_in.new_dd' => 'required',
-            'instance_in.html_body' => 'required',
-            'instance_in.sender_id' => 'required',
-            'instance_in.template_id' => 'nullable',
-            'instance_in.sent_count_cache' => 'required',
-            'instance_in.open_count_cache' => 'required',
-            'instance_in.click_count_cache' => 'required',
-            'instance_in.cache_update_time' => 'nullable',
-            'instance_in.ga_enabled' => 'required',
-            'instance_in.ga_campaign_title' => 'string',
-            'instance_in.lists.*.list_id' => 'required',
-            'instance_in.lists.*.segment_id' => 'required',
-            'instance_in.lists.*.list_name' => 'required',
-            'instance_in.lists.*.segment_name' => 'required',
-            'instance_in.creativity_type' => 'required',
-            'instance_in.template_source' => 'required',
-            'instance_in.template_editor_id' => 'required',
-            'instance_in.autoresponder.*.id' => 'nullable',
-            'instance_in.autoresponder.*.trigger_id' => 'string',
-            'instance_in.autoresponder.*.active' => 'string',
+            'instance_in.id'                          => 'nullable',
+            'instance_in.name'                        => 'required',
+            'instance_in.type'                        => 'required',
+            'instance_in.subject'                     => 'required',
+            'instance_in.new_dd'                      => 'required',
+            'instance_in.html_body'                   => 'required',
+            'instance_in.sender_id'                   => 'required',
+            'instance_in.template_id'                 => 'nullable',
+            'instance_in.sent_count_cache'            => 'required',
+            'instance_in.open_count_cache'            => 'required',
+            'instance_in.click_count_cache'           => 'required',
+            'instance_in.cache_update_time'           => 'nullable',
+            'instance_in.ga_enabled'                  => 'required',
+            'instance_in.ga_campaign_title'           => 'string',
+            'instance_in.lists.*.list_id'             => 'required',
+            'instance_in.lists.*.segment_id'          => 'required',
+            'instance_in.lists.*.list_name'           => 'required',
+            'instance_in.lists.*.segment_name'        => 'required',
+            'instance_in.creativity_type'             => 'required',
+            'instance_in.template_source'             => 'required',
+            'instance_in.template_editor_id'          => 'required',
+            'instance_in.autoresponder.*.id'          => 'nullable',
+            'instance_in.autoresponder.*.trigger_id'  => 'string',
+            'instance_in.autoresponder.*.active'      => 'string',
             'instance_in.autoresponder.*.hours_delay' => 'int',
             'instance_in.autoresponder.*.campaign_id' => 'nullable',
-            'instance_in.autoresponder.*.link_id' => 'nullable',
-            'instance_in.default_order_segments' => 'required',
+            'instance_in.autoresponder.*.link_id'     => 'nullable',
+            'instance_in.default_order_segments'      => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -122,37 +124,37 @@ class AutorespondersApi extends Api
 
     public function updateInstance(
         string $id,
-        array $body
+        array $body,
     ) {
         $validator = Validator::make($body, [
-            'instance_in.id' => 'nullable',
-            'instance_in.name' => 'required',
-            'instance_in.type' => 'required',
-            'instance_in.subject' => 'required',
-            'instance_in.new_dd' => 'required',
-            'instance_in.html_body' => 'required',
-            'instance_in.sender_id' => 'required',
-            'instance_in.template_id' => 'nullable',
-            'instance_in.sent_count_cache' => 'required',
-            'instance_in.open_count_cache' => 'required',
-            'instance_in.click_count_cache' => 'required',
-            'instance_in.cache_update_time' => 'nullable',
-            'instance_in.ga_enabled' => 'required',
-            'instance_in.ga_campaign_title' => 'string',
-            'instance_in.lists.*.list_id' => 'required',
-            'instance_in.lists.*.segment_id' => 'required',
-            'instance_in.lists.*.list_name' => 'required',
-            'instance_in.lists.*.segment_name' => 'required',
-            'instance_in.creativity_type' => 'required',
-            'instance_in.template_source' => 'required',
-            'instance_in.template_editor_id' => 'required',
-            'instance_in.autoresponder.*.id' => 'nullable',
-            'instance_in.autoresponder.*.trigger_id' => 'string',
-            'instance_in.autoresponder.*.active' => 'string',
+            'instance_in.id'                          => 'nullable',
+            'instance_in.name'                        => 'required',
+            'instance_in.type'                        => 'required',
+            'instance_in.subject'                     => 'required',
+            'instance_in.new_dd'                      => 'required',
+            'instance_in.html_body'                   => 'required',
+            'instance_in.sender_id'                   => 'required',
+            'instance_in.template_id'                 => 'nullable',
+            'instance_in.sent_count_cache'            => 'required',
+            'instance_in.open_count_cache'            => 'required',
+            'instance_in.click_count_cache'           => 'required',
+            'instance_in.cache_update_time'           => 'nullable',
+            'instance_in.ga_enabled'                  => 'required',
+            'instance_in.ga_campaign_title'           => 'string',
+            'instance_in.lists.*.list_id'             => 'required',
+            'instance_in.lists.*.segment_id'          => 'required',
+            'instance_in.lists.*.list_name'           => 'required',
+            'instance_in.lists.*.segment_name'        => 'required',
+            'instance_in.creativity_type'             => 'required',
+            'instance_in.template_source'             => 'required',
+            'instance_in.template_editor_id'          => 'required',
+            'instance_in.autoresponder.*.id'          => 'nullable',
+            'instance_in.autoresponder.*.trigger_id'  => 'string',
+            'instance_in.autoresponder.*.active'      => 'string',
             'instance_in.autoresponder.*.hours_delay' => 'int',
             'instance_in.autoresponder.*.campaign_id' => 'nullable',
-            'instance_in.autoresponder.*.link_id' => 'nullable',
-            'instance_in.default_order_segments' => 'required',
+            'instance_in.autoresponder.*.link_id'     => 'nullable',
+            'instance_in.default_order_segments'      => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -171,10 +173,11 @@ class AutorespondersApi extends Api
     }
 
     public function deleteInstance(
-        string $id
+        string $id,
     ) {
         $response = $this->destroy('newsletters/'.$id);
-        //dd($response);
+
+        // dd($response);
         if (! $response->success) {
             return new Error($response->data);
         }
@@ -186,12 +189,12 @@ class AutorespondersApi extends Api
 
     public function sendTestEmail(
         string $id,
-        array $body
+        array $body,
     ) {
         $validator = Validator::make($body, [
-            'instance_in.id' => 'required',
+            'instance_in.id'      => 'required',
             'instance_in.command' => 'required',
-            'instance_in.email' => 'required',
+            'instance_in.email'   => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -211,7 +214,7 @@ class AutorespondersApi extends Api
 
     public function activate(
         string $id,
-        array $body
+        array $body,
     ) {
         $response = $this->put('newsletters/'.$id.'?activate=1', $body);
 
@@ -226,7 +229,7 @@ class AutorespondersApi extends Api
 
     public function deactivate(
         string $id,
-        array $body
+        array $body,
     ) {
         $response = $this->put('newsletters/'.$id.'?activate=-1', $body);
 
@@ -240,7 +243,7 @@ class AutorespondersApi extends Api
     }
 
     public function cloning(
-        array $body
+        array $body,
     ) {
         $validator = Validator::make($body, [
             'instance_in.id' => 'required',
@@ -262,7 +265,7 @@ class AutorespondersApi extends Api
     }
 
     public function getLinksCollection(
-        string $id
+        string $id,
     ) {
         $response = $this->get('newsletters/'.$id.'/links');
 

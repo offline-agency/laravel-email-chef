@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use Illuminate\Support\Facades\Validator;
@@ -18,12 +20,12 @@ class SegmentsApi extends Api
     public function getCollection(
         string $list_id,
         ?int $limit,
-        ?int $offset
+        ?int $offset,
     ) {
         $response = $this->get('lists/'.$list_id.'/segments?limit='.$limit.'&offset='.$offset, [
             'list_id' => $list_id,
-            'limit' => $limit,
-            'offset' => $offset,
+            'limit'   => $limit,
+            'offset'  => $offset,
         ]);
 
         if (! $response->success) {
@@ -32,6 +34,7 @@ class SegmentsApi extends Api
 
         $collections = $response->data;
         $out = collect();
+
         foreach ($collections as $collection) {
             $out->push(new SegmentCollection($collection));
         }
@@ -40,7 +43,7 @@ class SegmentsApi extends Api
     }
 
     public function getInstance(
-        string $segment_id
+        string $segment_id,
     ) {
         $response = $this->get('lists/108094/segments/'.$segment_id, [
             'segment_id' => $segment_id,
@@ -50,17 +53,17 @@ class SegmentsApi extends Api
             return new Error($response->data);
         }
 
-        //dd($response);
+        // dd($response);
 
         $getInstance = $response->data;
 
-        //dd($getInstance);
+        // dd($getInstance);
 
         return new Segment($getInstance);
     }
 
     public function getCount(
-        string $list_id
+        string $list_id,
     ) {
         $response = $this->get('lists/'.$list_id.'/segments/count?');
 
@@ -74,7 +77,7 @@ class SegmentsApi extends Api
     }
 
     public function getContactsCount(
-        string $segment_id
+        string $segment_id,
     ) {
         $response = $this->get('segments/'.$segment_id.'/contacts/count', [
             'segment_id' => $segment_id,
@@ -91,22 +94,22 @@ class SegmentsApi extends Api
 
     public function createInstance(
         int $list_id,
-        array $body
+        array $body,
     ) {
         $validator = Validator::make($body, [
-            'instance_in.list_id' => 'required',
-            'instance_in.logic' => 'required',
-            'instance_in.condition_groups' => 'required|array',
-            'instance_in.condition_groups.*.logic' => 'required|string',
-            'instance_in.condition_groups.*.conditions' => 'required|array',
+            'instance_in.list_id'                                       => 'required',
+            'instance_in.logic'                                         => 'required',
+            'instance_in.condition_groups'                              => 'required|array',
+            'instance_in.condition_groups.*.logic'                      => 'required|string',
+            'instance_in.condition_groups.*.conditions'                 => 'required|array',
             'instance_in.condition_groups.*.conditions.*.comparable_id' => 'nullable',
             'instance_in.condition_groups.*.conditions.*.comparator_id' => 'required|string',
-            'instance_in.condition_groups.*.conditions.*.field_id' => 'required|string',
-            'instance_in.condition_groups.*.conditions.*.name' => 'required|string',
-            'instance_in.condition_groups.*.conditions.*.value' => 'required|string',
-            'instance_in.description' => 'nullable|string',
-            'instance_in.id' => 'nullable',
-            'instance_in.name' => 'required|string',
+            'instance_in.condition_groups.*.conditions.*.field_id'      => 'required|string',
+            'instance_in.condition_groups.*.conditions.*.name'          => 'required|string',
+            'instance_in.condition_groups.*.conditions.*.value'         => 'required|string',
+            'instance_in.description'                                   => 'nullable|string',
+            'instance_in.id'                                            => 'nullable',
+            'instance_in.name'                                          => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -127,22 +130,22 @@ class SegmentsApi extends Api
     public function updateInstance(
         string $list_id,
         string $segment_id,
-        array $body
+        array $body,
     ) {
         $validator = Validator::make($body, [
-            'instance_in.list_id' => 'required',
-            'instance_in.logic' => 'required',
-            'instance_in.condition_groups' => 'required|array',
-            'instance_in.condition_groups.*.logic' => 'required|string',
-            'instance_in.condition_groups.*.conditions' => 'required|array',
+            'instance_in.list_id'                                       => 'required',
+            'instance_in.logic'                                         => 'required',
+            'instance_in.condition_groups'                              => 'required|array',
+            'instance_in.condition_groups.*.logic'                      => 'required|string',
+            'instance_in.condition_groups.*.conditions'                 => 'required|array',
             'instance_in.condition_groups.*.conditions.*.comparable_id' => 'nullable',
             'instance_in.condition_groups.*.conditions.*.comparator_id' => 'required|string',
-            'instance_in.condition_groups.*.conditions.*.field_id' => 'required|string',
-            'instance_in.condition_groups.*.conditions.*.name' => 'required|string',
-            'instance_in.condition_groups.*.conditions.*.value' => 'required|string',
-            'instance_in.description' => 'nullable|string',
-            'instance_in.id' => 'nullable',
-            'instance_in.name' => 'required|string',
+            'instance_in.condition_groups.*.conditions.*.field_id'      => 'required|string',
+            'instance_in.condition_groups.*.conditions.*.name'          => 'required|string',
+            'instance_in.condition_groups.*.conditions.*.value'         => 'required|string',
+            'instance_in.description'                                   => 'nullable|string',
+            'instance_in.id'                                            => 'nullable',
+            'instance_in.name'                                          => 'required|string',
         ]);
 
         if ($validator->fails()) {
@@ -161,7 +164,7 @@ class SegmentsApi extends Api
     }
 
     public function deleteInstance(
-        string $segment_id
+        string $segment_id,
     ) {
         $response = $this->destroy('segments/'.$segment_id, [
             'segment_id' => $segment_id,

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use Illuminate\Support\Facades\Validator;
@@ -10,7 +12,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Error;
 class AccountInfosApi extends Api
 {
     public function getInstance(
-        string $accountId
+        string $accountId,
     ) {
         $response = $this->get('account_infos/'.$accountId);
 
@@ -22,18 +24,18 @@ class AccountInfosApi extends Api
     }
 
     public function update(
-        array $instance_in = []
+        array $instance_in = [],
     ) {
         $validator = Validator::make($instance_in, [
-            'firstname' => 'required|string',
-            'lastname' => 'required|string',
-            'business' => 'required|string',
-            'address_1' => 'required|string',
-            'city' => 'required|string',
-            'country' => 'required|string',
+            'firstname'    => 'required|string',
+            'lastname'     => 'required|string',
+            'business'     => 'required|string',
+            'address_1'    => 'required|string',
+            'city'         => 'required|string',
+            'country'      => 'required|string',
             'phone_number' => 'required|string',
-            'postal_code' => 'required|string',
-            'website' => 'required|string',
+            'postal_code'  => 'required|string',
+            'website'      => 'required|string',
         ]);
 
         if ($validator->fails()) {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use OfflineAgency\LaravelEmailChef\Api\Api;
@@ -13,12 +15,12 @@ class BlockingsApi extends Api
     public function getCollection(
         string $query_string,
         ?int $limit,
-        ?int $offset
+        ?int $offset,
     ) {
         $response = $this->get('blockings?$query_string='.$query_string.'&limit='.$limit.'&offset='.$offset, [
             'query_string' => $query_string,
-            'limit' => $limit,
-            'offset' => $offset,
+            'limit'        => $limit,
+            'offset'       => $offset,
         ]);
 
         if (! $response->success) {
@@ -28,6 +30,7 @@ class BlockingsApi extends Api
         $collection = $response->data;
 
         $out = collect();
+
         foreach ($collection as $collectionItem) {
             $out->push(new GetCollection($collectionItem));
         }
@@ -53,7 +56,7 @@ class BlockingsApi extends Api
 
     public function create(
         string $email,
-        string $type
+        string $type,
     ) {
         $response = $this->post('blockings?email='.$email.'&type='.$type, []);
 
@@ -67,7 +70,7 @@ class BlockingsApi extends Api
     }
 
     public function delete(
-        string $email
+        string $email,
     ) {
         $response = $this->destroy('blockings/'.$email);
 

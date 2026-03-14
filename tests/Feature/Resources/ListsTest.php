@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests\Feature\Resources;
 
 use Carbon\Carbon;
@@ -15,15 +17,14 @@ use OfflineAgency\LaravelEmailChef\Tests\TestCase;
 
 class ListsTest extends TestCase
 {
-    public function test_get_collection()
-    {
-        $list = new ListsApi;
+    public function test_get_collection() {
+        $list = new ListsApi();
 
         $response = $list->getCollection(
             10,
             0,
             'n',
-            'a'
+            'a',
         );
 
         $contact = $response->first();
@@ -43,8 +44,7 @@ class ListsTest extends TestCase
         $this->assertIsInt($contact->forms);
     }
 
-    public function test_get_instance()
-    {
+    public function test_get_instance() {
         $list = new ListsApi();
 
         $response = $list->getInstance(
@@ -56,14 +56,13 @@ class ListsTest extends TestCase
         $this->assertIsString($response->description);
     }
 
-    public function test_get_stats()
-    {
+    public function test_get_stats() {
         $list = new ListsApi();
 
         $response = $list->getStats(
             '97322',
             '2023-01-01',
-            '2023-06-10'
+            '2023-06-10',
         );
 
         $this->assertInstanceOf(GetStats::class, $response);
@@ -73,24 +72,22 @@ class ListsTest extends TestCase
         $this->assertIsString($response->last_date);
     }
 
-    public function test_unsubscribe()
-    {
+    public function test_unsubscribe() {
         $list = new ListsApi();
 
         $response = $list->unsubscribe(
             '97322',
-            '53998920'
+            '53998920',
         );
 
         $this->assertIsString($response);
     }
 
-    public function test_create()
-    {
+    public function test_create() {
         $list = new ListsApi();
 
         $response = $list->create([
-            'list_name' => 'OA run test 2',
+            'list_name'        => 'OA run test 2',
             'list_description' => 'Test di creazione lista tramite API',
         ]);
 
@@ -98,27 +95,27 @@ class ListsTest extends TestCase
         $this->assertIsObject($response);
     }
 
-    public function test_update()
-    {
-        $this->markTestIncomplete(); //remove this after changing the parameters on the update method below
+    public function test_update() {
+        $this->markTestIncomplete(); // remove this after changing the parameters on the update method below
         $list = new ListsApi();
 
-        $response = $list->update('123246', [
-            'list_name' => 'Lista personalizzata OA',
-            'list_description' => 'Test di modifica per lista',
-        ]
+        $response = $list->update(
+            '123246',
+            [
+                'list_name'        => 'Lista personalizzata OA',
+                'list_description' => 'Test di modifica per lista',
+            ],
         );
 
         $this->assertInstanceOf(UpdateList::class, $response);
         $this->assertIsString($response->list_id);
     }
 
-    public function test_delete()
-    {
+    public function test_delete() {
         $list = new ListsApi();
 
         $response = $list->create([
-            'list_name' => 'OA run test 3',
+            'list_name'        => 'OA run test 3',
             'list_description' => 'Test di creazione lista tramite API',
         ]);
 
@@ -127,17 +124,16 @@ class ListsTest extends TestCase
         $this->assertIsString($response);
     }
 
-    public function test_subscribe()
-    {
+    public function test_subscribe() {
         $list = new ListsApi();
 
         $response = $list->subscribe(
             config('email-chef.list_id'),
-            config('email-chef.contact_id')
+            config('email-chef.contact_id'),
         );
 
         $this->assertTrue(
-            $response instanceof ContactList || $response instanceof Error
+            $response instanceof ContactList || $response instanceof Error,
         );
     }
 }

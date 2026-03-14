@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests\Feature\Resources;
 
 use OfflineAgency\LaravelEmailChef\Api\Resources\AccountApi;
@@ -8,8 +10,7 @@ use OfflineAgency\LaravelEmailChef\Tests\TestCase;
 
 class AccountTest extends TestCase
 {
-    public function test_get_collection()
-    {
+    public function test_get_collection() {
         $account = new AccountApi();
 
         $response = $account->getCollection();

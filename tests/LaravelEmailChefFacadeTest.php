@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests;
 
 use Mockery;
@@ -10,15 +12,15 @@ class LaravelEmailChefFacadeTest extends TestCase
     /**
      * @test
      */
-    public function it_loads_facade_alias()
-    {
+    public function it_loads_facade_alias() {
         $this->app->singleton(
             'laravel-email-chef',
-            function ($app) {
-                return Mockery::mock(LaravelEmailChef::class, function ($mock) {
+            static function ($app) {
+                return Mockery::mock(LaravelEmailChef::class, static function ($mock) {
                     $mock->shouldReceive('test');
                 });
-            });
+            },
+        );
 
         \LaravelEmailChef::test();
 

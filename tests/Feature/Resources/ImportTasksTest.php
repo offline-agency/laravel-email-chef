@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests\Feature\Resources;
 
 use OfflineAgency\LaravelEmailChef\Api\Resources\ImportTasksApi;
@@ -10,8 +12,7 @@ use OfflineAgency\LaravelEmailChef\Tests\TestCase;
 
 class ImportTasksTest extends TestCase
 {
-    public function test_get_collection()
-    {
+    public function test_get_collection() {
         $import_tasks = new ImportTasksApi();
 
         $response = $import_tasks->getCollection();
@@ -31,12 +32,11 @@ class ImportTasksTest extends TestCase
         $this->assertIsString($import_task->list_name);
     }
 
-    public function test_get_instance()
-    {
+    public function test_get_instance() {
         $import_tasks = new ImportTasksApi();
 
         $response = $import_tasks->getInstance(
-            2201836
+            2201836,
         );
 
         $this->assertInstanceOf(GetInstance::class, $response);
@@ -50,9 +50,8 @@ class ImportTasksTest extends TestCase
         $this->assertIsString($response->list_name);
     }
 
-    public function test_create()
-    {
-        $this->markTestIncomplete(); //remove this after changing the parameters on the create method below
+    public function test_create() {
+        $this->markTestIncomplete(); // remove this after changing the parameters on the create method below
 
         $import_tasks = new ImportTasksApi();
 
@@ -63,25 +62,25 @@ class ImportTasksTest extends TestCase
                     [
                         [
                             'placeholder' => 'email',
-                            'value' => 'fzancan@gmail.com',
+                            'value'       => 'fzancan@gmail.com',
                         ],
                     ],
                     [
                         [
                             'placeholder' => 'first_name',
-                            'value' => 'Federico',
+                            'value'       => 'Federico',
                         ],
                     ],
                     [
                         [
                             'placeholder' => 'last_name',
-                            'value' => 'Zancan',
+                            'value'       => 'Zancan',
                         ],
                     ],
 
                 ],
                 'notification_link' => 'http://usersremotesite.net/notifications/endpoint',
-            ]
+            ],
         );
 
         $this->assertInstanceOf(CreatedImportTasksEntity::class, $response);

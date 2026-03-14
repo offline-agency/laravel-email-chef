@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use Illuminate\Support\Facades\Validator;
@@ -22,6 +24,7 @@ class ImportTasksApi extends Api
         $collection = $response->data;
 
         $out = collect();
+
         foreach ($collection as $collectionItem) {
             $out->push(new GetCollection($collectionItem));
         }
@@ -30,7 +33,7 @@ class ImportTasksApi extends Api
     }
 
     public function getInstance(
-        string $task_id
+        string $task_id,
     ) {
         $response = $this->get('importtasks/'.$task_id, [
             'task_id' => $task_id,
@@ -47,10 +50,10 @@ class ImportTasksApi extends Api
 
     public function create(
         string $list_id,
-        array $instance_in = []
+        array $instance_in = [],
     ) {
         $validator = Validator::make($instance_in, [
-            'contacts' => 'required|array',
+            'contacts'          => 'required|array',
             'notification_link' => 'string',
         ]);
 

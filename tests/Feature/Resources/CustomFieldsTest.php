@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests\Feature\Resources;
 
 use Illuminate\Support\Collection;
@@ -13,12 +15,11 @@ use OfflineAgency\LaravelEmailChef\Tests\TestCase;
 
 class CustomFieldsTest extends TestCase
 {
-    public function test_get_collection()//todo: check this method
-    {
-        $custom_fields = new CustomFieldsApi;
+    public function test_get_collection() {// todo: check this method
+        $custom_fields = new CustomFieldsApi();
 
         $response = $custom_fields->getCollection(
-            108094
+            108094,
         );
 
         $custom_field = $response->first();
@@ -35,12 +36,11 @@ class CustomFieldsTest extends TestCase
         $this->assertIsString($custom_field->data_type);
     }
 
-    public function test_get_instance()
-    {
-        $custom_fields = new CustomFieldsApi;
+    public function test_get_instance() {
+        $custom_fields = new CustomFieldsApi();
 
         $response = $custom_fields->getInstance(
-            '170972'
+            '170972',
         );
 
         $this->assertInstanceOf(GetInstance::class, $response);
@@ -54,73 +54,69 @@ class CustomFieldsTest extends TestCase
         $this->assertIsString($response->data_type);
     }
 
-    public function test_get_count()
-    {
-        $custom_fields = new CustomFieldsApi;
+    public function test_get_count() {
+        $custom_fields = new CustomFieldsApi();
 
         $response = $custom_fields->count(
-            108094
+            108094,
         );
 
         $this->assertInstanceOf(CountCustomFieldsEntity::class, $response);
         $this->assertIsString($response->totalcount);
     }
 
-    public function test_create()
-    {
-        $this->markTestIncomplete(); //remove this after changing the parameters on the update method below
+    public function test_create() {
+        $this->markTestIncomplete(); // remove this after changing the parameters on the update method below
 
         $custom_fields = new CustomFieldsApi();
 
         $response = $custom_fields->create(
             '108094',
             [
-                'data_type' => 'string',
-                'name' => 'Smartphone4',
-                'place_holder' => 'smartphone4',
+                'data_type'     => 'string',
+                'name'          => 'Smartphone4',
+                'place_holder'  => 'smartphone4',
                 'default_value' => '1',
-            ]
+            ],
         );
 
         $this->assertInstanceOf(CreatedCustomFieldsEntity::class, $response);
         $this->assertIsString($response->custom_field_id);
     }
 
-    public function test_update()
-    {
-        $this->markTestIncomplete(); //remove this after changing the parameters on the update method below
+    public function test_update() {
+        $this->markTestIncomplete(); // remove this after changing the parameters on the update method below
 
         $custom_fields = new CustomFieldsApi();
 
         $response = $custom_fields->update(
             '170972',
             [
-                'list_id' => '108094',
-                'name' => 'Smartphone6',
-                'type_id' => '4',
-                'place_holder' => 'smartphone6',
+                'list_id'       => '108094',
+                'name'          => 'Smartphone6',
+                'type_id'       => '4',
+                'place_holder'  => 'smartphone6',
                 'default_value' => '1',
-                'admin_only' => '0',
-                'data_type' => 'string',
-            ]
+                'admin_only'    => '0',
+                'data_type'     => 'string',
+            ],
         );
 
         $this->assertInstanceOf(UpdatedCustomFieldsEntity::class, $response);
         $this->assertIsString($response->custom_field_id);
     }
 
-    public function test_delete()
-    {
+    public function test_delete() {
         $custom_fields = new CustomFieldsApi();
 
         $response = $custom_fields->create(
             108094,
             [
-                'data_type' => 'boolean',
-                'name' => 'Smartphone1',
-                'place_holder' => 'smartphone1',
+                'data_type'     => 'boolean',
+                'name'          => 'Smartphone1',
+                'place_holder'  => 'smartphone1',
                 'default_value' => '1',
-            ]
+            ],
         );
 
         $response = $custom_fields->delete($response->custom_field_id);

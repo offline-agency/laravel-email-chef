@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Entities;
 
 abstract class AbstractEntity
 {
     public function __construct(
-        ?object $parameters
+        ?object $parameters,
     ) {
         if (is_null($parameters)) {
             return;
@@ -19,7 +21,7 @@ abstract class AbstractEntity
     }
 
     private function build(
-        array $parameters
+        array $parameters,
     ): void {
         foreach ($parameters as $property => $value) {
             if (property_exists($this, $property)) {

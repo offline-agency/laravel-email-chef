@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'baseUrl' => 'https://app.emailchef.com/apps/api/v1/',
 

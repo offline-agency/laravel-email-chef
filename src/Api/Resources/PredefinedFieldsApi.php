@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use OfflineAgency\LaravelEmailChef\Api\Api;
@@ -19,8 +21,9 @@ class PredefinedFieldsApi extends Api
         $collection = $response->data;
 
         $out = collect();
+
         foreach ($collection as $collectionItem) {
-            $out->push(new PredefinedFieldsEntity($collectionItem)); //Qui uso PredefinedFieldsEntity e non creo una nuova entità perché le variabili di esempleare sono uguali
+            $out->push(new PredefinedFieldsEntity($collectionItem)); // Qui uso PredefinedFieldsEntity e non creo una nuova entità perché le variabili di esempleare sono uguali
         }
 
         return $out;

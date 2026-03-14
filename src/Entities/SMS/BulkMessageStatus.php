@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Entities\SMS;
 
 use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
@@ -7,6 +9,7 @@ use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
 class BulkMessageStatus extends AbstractEntity
 {
     public string $bulk_id;
+
     public string $message_id;
 
     public string $to;

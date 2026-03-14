@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use Carbon\Carbon;
@@ -18,12 +20,12 @@ class ListsApi extends Api
         ?int $limit,
         ?int $offset,
         ?string $orderby,
-        ?string $order_type
+        ?string $order_type,
     ) {
         $response = $this->get('lists?limit='.$limit.'&offset='.$offset.'&orderby='.$orderby.'&ordertype='.$order_type, [
-            'limit' => $limit,
-            'offset' => $offset,
-            'orderby' => $orderby,
+            'limit'      => $limit,
+            'offset'     => $offset,
+            'orderby'    => $orderby,
             'order_type' => $order_type,
         ]);
 
@@ -34,6 +36,7 @@ class ListsApi extends Api
         $collections = $response->data;
 
         $out = collect();
+
         foreach ($collections as $collection) {
             $collection->date = Carbon::parse($collection->date);
             $out->push(new GetCollection($collection));
@@ -43,7 +46,7 @@ class ListsApi extends Api
     }
 
     public function getInstance(
-        string $id
+        string $id,
     ) {
         $response = $this->get('lists/'.$id, [
             'id' => $id,
@@ -61,11 +64,11 @@ class ListsApi extends Api
     public function getStats(
         string $list_id,
         string $start_date,
-        string $end_date
+        string $end_date,
     ) {
         $response = $this->get('lists/'.$list_id.'/stats?start_date='.$start_date.'&end_date='.$end_date, [
             'start_date' => $start_date,
-            'end_date' => $end_date,
+            'end_date'   => $end_date,
         ]);
 
         if (! $response->success) {
@@ -79,28 +82,28 @@ class ListsApi extends Api
 
     public function unsubscribe(
         string $list_id,
-        string $contact_id
+        string $contact_id,
     ) {
         $response = $this->get('lists/'.$list_id.'/unsubscribe?contact_id='.$contact_id.'$contact_idlist_id='.$list_id, [
             'contact_id' => $contact_id,
-            'list_id' => $list_id,
+            'list_id'    => $list_id,
         ]);
 
         if (! $response->success) {
             return new Error($response->data);
         }
 
-        //this endpoint does not return response
-        /*$result = $response->data;*/
+        // this endpoint does not return response
+        /* $result = $response->data; */
 
         return 'Actually Contact #'.$contact_id.' is not in your list';
     }
 
     public function create(
-        array $instance_in = []
+        array $instance_in = [],
     ) {
         $validator = Validator::make($instance_in, [
-            'list_name' => 'required',
+            'list_name'        => 'required',
             'list_description' => 'string',
         ]);
 
@@ -123,10 +126,10 @@ class ListsApi extends Api
 
     public function update(
         string $list_id,
-        array $instance_in = []
+        array $instance_in = [],
     ) {
         $validator = Validator::make($instance_in, [
-            'list_name' => 'required',
+            'list_name'        => 'required',
             'list_description' => 'string',
         ]);
 
@@ -148,7 +151,7 @@ class ListsApi extends Api
     }
 
     public function delete(
-        string $list_id
+        string $list_id,
     ) {
         $response = $this->destroy('lists/'.$list_id);
 
@@ -161,7 +164,7 @@ class ListsApi extends Api
 
     public function subscribe(
         string $list_id,
-        string $contact_id
+        string $contact_id,
     ): ContactList|Error {
         $response = $this->post('lists/'.$list_id.'/subscribe', [
             'contact_id' => $contact_id,

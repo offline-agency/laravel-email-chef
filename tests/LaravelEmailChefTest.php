@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests;
 
 use OfflineAgency\LaravelEmailChef\LaravelEmailChef;
@@ -9,9 +11,8 @@ class LaravelEmailChefTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function test_login()
-    {
-        $laravelEmailChef = new LaravelEmailChef;
+    public function test_login() {
+        $laravelEmailChef = new LaravelEmailChef();
 
         $laravelEmailChef->login();
 
@@ -21,10 +22,9 @@ class LaravelEmailChefTest extends TestCase
     /**
      * @throws \Exception
      */
-    public function test_wrong_login()
-    {
+    public function test_wrong_login() {
         $this->markTestIncomplete();
-        $LaravelEmailChef = new LaravelEmailChef;
+        $LaravelEmailChef = new LaravelEmailChef();
 
         $LaravelEmailChef->login();
 

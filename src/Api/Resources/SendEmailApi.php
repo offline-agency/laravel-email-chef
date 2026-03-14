@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api\Resources;
 
 use OfflineAgency\LaravelEmailChef\Api\Api;
@@ -9,7 +11,7 @@ use OfflineAgency\LaravelEmailChef\Entities\SendEmail\SendMail;
 class SendEmailApi extends Api
 {
     public function sendMail(
-        array $body
+        array $body,
     ) {
         $response = $this->post('sendmail', $body);
 
