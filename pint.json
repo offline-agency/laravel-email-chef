@@ -109,7 +109,6 @@
     "single_space_around_construct": true,
     "space_after_semicolon": { "remove_in_empty_for_expressions": true },
     "standardize_not_equals": true,
-    "static_lambda": true,
     "strict_comparison": true,
     "switch_case_semicolon_to_colon": true,
     "switch_case_space": true,

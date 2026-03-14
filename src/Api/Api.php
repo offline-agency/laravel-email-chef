@@ -118,7 +118,7 @@ class Api extends LaravelEmailChef
     private function parseResponse($response): object {
         return (object) [
             'success' => $response->status() === 200,
-            'data'    => json_decode($response),
+            'data'    => json_decode($response->body()),
         ];
     }
 }
