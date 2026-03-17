@@ -1,0 +1,41 @@
+name: release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          tools: composer
+
+      - name: Install dependencies
+        run: composer install --prefer-dist --no-interaction
+
+      - name: Smoke test
+        run: ./vendor/bin/pest --no-coverage
+
+      - name: Generate changelog
+        uses: orhun/git-cliff-action@v3
+        with:
+          config: cliff.toml
+          args: --latest --strip header
+        env:
+          OUTPUT: CHANGELOG_RELEASE.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: CHANGELOG_RELEASE.md
+          token: ${{ secrets.GITHUB_TOKEN }}

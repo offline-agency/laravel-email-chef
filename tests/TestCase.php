@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Tests;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
@@ -11,8 +13,7 @@ use Orchestra\Testbench\TestCase as BaseTestCase;
 
 class TestCase extends BaseTestCase
 {
-    protected function setUp(): void
-    {
+    protected function setUp(): void {
         parent::setUp();
         Config::set('email-chef.baseUrl', 'https://app.emailchef.com/apps/api/v1/');
         Config::set('email-chef.login_url', 'https://app.emailchef.com/api/');
@@ -21,27 +22,25 @@ class TestCase extends BaseTestCase
         Config::set('email-chef.list_id', '97322');
 
         Factory::guessFactoryNamesUsing(
-            fn (string $modelName) => 'OfflineAgency\\LaravelEmailChef\\Database\\Factories\\'.class_basename($modelName).'Factory'
+            static fn (string $modelName) => 'OfflineAgency\\LaravelEmailChef\\Database\\Factories\\'.class_basename($modelName).'Factory',
         );
     }
 
-    protected function getPackageProviders($app)
-    {
+    protected function getPackageProviders($app) {
         return [
             LaravelEmailChefServiceProvider::class,
         ];
     }
 
     public function getPackageAliases(
-        $app
+        $app,
     ): array {
         return [
             'LaravelEmailChef' => LaravelEmailChefFacade::class,
         ];
     }
 
-    protected function getEnvironmentSetUp($app)
-    {
+    protected function getEnvironmentSetUp($app) {
         // make sure, our .env file is loaded
         $app->useEnvironmentPath(__DIR__.'/..');
         $app->bootstrapWith([LoadEnvironmentVariables::class]);

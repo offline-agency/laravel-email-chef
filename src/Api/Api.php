@@ -1,14 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef\Api;
 
+use Illuminate\Http\Client\Response;
 use OfflineAgency\LaravelEmailChef\LaravelEmailChef;
 
 class Api extends LaravelEmailChef
 {
+    /**
+     * @param array<string, mixed> $query_parameters
+     */
     protected function get(
         string $url,
-        array $query_parameters = []
+        array $query_parameters = [],
     ): object {
         $complete_url = $this->baseUrl.$url;
 
@@ -25,9 +31,12 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     protected function post(
         string $url,
-        array $body
+        array $body,
     ): object {
         $complete_url = $this->baseUrl.$url;
 
@@ -35,18 +44,21 @@ class Api extends LaravelEmailChef
 
         $response_status = $response->status();
 
-//        if ($response_status === 403 || $response_status === 429) {
-//            $this->waitThrottle($response_status);
-//
-//            $this->post($url, $body);
-//        }
+        //        if ($response_status === 403 || $response_status === 429) {
+        //            $this->waitThrottle($response_status);
+        //
+        //            $this->post($url, $body);
+        //        }
 
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $body
+     */
     protected function put(
         string $url,
-        array $body
+        array $body,
     ): object {
         $complete_url = $this->baseUrl.$url;
 
@@ -63,9 +75,12 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $query_parameters
+     */
     protected function destroy(
         string $url,
-        array $query_parameters = []
+        array $query_parameters = [],
     ): object {
         $complete_url = $this->baseUrl.$url;
 
@@ -82,11 +97,18 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     * @param array<string>        $fields
+     *
+     * @return array<string, mixed>
+     */
     protected function data(
         array $data,
-        array $fields
+        array $fields,
     ): array {
         $parsed_data = [];
+
         foreach ($data as $key => $value) {
             if (in_array($key, $fields)) {
                 $parsed_data[$key] = $value;
@@ -97,8 +119,8 @@ class Api extends LaravelEmailChef
     }
 
     private function waitThrottle(
-        int $status
-    ) {
+        int $status,
+    ): void {
         switch ($status) {
             case 403:
                 usleep(config('email-chef.limits.403'));
@@ -112,11 +134,10 @@ class Api extends LaravelEmailChef
         }
     }
 
-    private function parseResponse($response): object
-    {
+    private function parseResponse(Response $response): object {
         return (object) [
             'success' => $response->status() === 200,
-            'data' => json_decode($response),
+            'data'    => json_decode($response->body()),
         ];
     }
 }

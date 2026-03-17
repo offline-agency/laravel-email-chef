@@ -1,21 +1,28 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef;
 
 use Exception;
+use Illuminate\Http\Client\PendingRequest;
 use Illuminate\Support\Facades\Http;
 
 class LaravelEmailChef
 {
-    private $username;
-    private $password;
-    protected $login_url;
-    protected $baseUrl;
-    private $authkey;
-    protected $header;
+    private mixed $username;
 
-    public function __construct()
-    {
+    private mixed $password;
+
+    protected mixed $login_url;
+
+    protected mixed $baseUrl;
+
+    private mixed $authkey;
+
+    protected PendingRequest $header;
+
+    public function __construct() {
         $this->setUsername();
 
         $this->setPassword();
@@ -32,8 +39,7 @@ class LaravelEmailChef
     /**
      * @throws Exception
      */
-    public function login()
-    {
+    public function login(): void {
         $url = $this->getLoginUrl().'login';
         $username = $this->getUsername();
         $password = $this->getPassword();
@@ -48,7 +54,7 @@ class LaravelEmailChef
             'password' => $this->getPassword(),
         ]);
 
-        //TODO: check result status and handle errors
+        // TODO: check result status and handle errors
 
         $result = json_decode($result->body());
 
@@ -59,61 +65,46 @@ class LaravelEmailChef
         $this->setAuthKey($result->authkey);
     }
 
-    private function setHeader()
-    {
+    private function setHeader(): void {
         $this->header = Http::withHeaders([
-            'Accept' => 'application/json; charset=utf-8',
+            'Accept'  => 'application/json; charset=utf-8',
             'authkey' => $this->getAuthKey(),
         ]);
     }
 
-    private function getPassword()
-    {
+    private function getPassword(): mixed {
         return $this->password;
     }
 
-    private function setPassword(): void
-    {
+    private function setPassword(): void {
         $this->password = config('email-chef.password');
     }
 
-    private function getUsername()
-    {
+    private function getUsername(): mixed {
         return $this->username;
     }
 
-    private function setUsername(): void
-    {
+    private function setUsername(): void {
         $this->username = config('email-chef.username');
     }
 
-    public function getAuthKey()
-    {
+    public function getAuthKey(): mixed {
         return $this->authkey;
     }
 
-    private function setAuthKey($authKey): void
-    {
+    private function setAuthKey(mixed $authKey): void {
         $this->authkey = $authKey;
     }
 
-    private function setBaseUrl(): void
-    {
+    private function setBaseUrl(): void {
         $this->baseUrl = config('email-chef.baseUrl');
     }
 
-    private function getBaseUrl()
-    {
-        return $this->baseUrl;
-    }
-
-    public function getLoginUrl()
-    {
+    public function getLoginUrl(): mixed {
         return $this->login_url;
     }
 
-    public function setLoginUrl(): void
-    {
+    public function setLoginUrl(): void {
         $this->login_url = config('email-chef.login_url');
     }
 }

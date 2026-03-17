@@ -1,16 +1,17 @@
 <?php
 
+declare(strict_types=1);
+
 namespace OfflineAgency\LaravelEmailChef;
 
 use Illuminate\Support\Facades\Facade;
 
 /**
- * @see \OfflineAgency\LaravelEmailChef\LaravelEmailChef
+ * @see LaravelEmailChef
  */
 class LaravelEmailChefFacade extends Facade
 {
-    protected static function getFacadeAccessor()
-    {
+    protected static function getFacadeAccessor() {
         return 'laravel-email-chef';
     }
 }

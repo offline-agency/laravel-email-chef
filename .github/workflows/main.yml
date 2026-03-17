@@ -3,7 +3,7 @@ name: run-tests
 on:
   push:
     branches:
-    tags:
+  tags:
 
 jobs:
   test:
@@ -11,42 +11,39 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        os: [ubuntu-latest, macos-latest]
-        php: [8.0, 8.1, 8.2]
-        laravel: [8.*, 9.*]
-    env:
-      EMAIL_CHEF_USERNAME: ${{ secrets.EMAIL_CHEF_USERNAME }}
-      EMAIL_CHEF_PASSWORD: ${{ secrets.EMAIL_CHEF_PASSWORD }}
+        os: [ubuntu-latest]
+        php: ['8.4', '8.5']
+        laravel: ['12.*']
+        dependency-version: [prefer-stable]
 
-    name: P${{ matrix.php }} - L${{ matrix.laravel }} - ${{ matrix.os }}
+    name: PHP ${{ matrix.php }} - Laravel ${{ matrix.laravel }} - ${{ matrix.os }}
 
     steps:
-      - uses: actions/checkout@v2
-      - name: "Installing php"
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
-          extensions: curl,mbstring,xdebug
+          extensions: curl, mbstring, xdebug
           coverage: xdebug
           tools: composer
-      - name: Show PHP version
-        run: php -v && composer -V
-      - name: Download Composer cache dependencies from cache
-        id: composer-cache
-        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
       - name: Cache Composer dependencies
-        uses: actions/cache@v1
+        uses: actions/cache@v4
         with:
-          path: ${{ steps.composer-cache.outputs.dir }}
-          key: ${{ matrix.os }}-composer-${{ hashFiles('**/composer.json') }}
-          restore-keys: ${{ matrix.os }}-composer-
+          path: $(composer config cache-files-dir)
+          key: ${{ matrix.os }}-php${{ matrix.php }}-composer-${{ hashFiles('**/composer.json') }}
+          restore-keys: ${{ matrix.os }}-php${{ matrix.php }}-composer-
+
       - name: Install dependencies
-        run: |
-          composer update --prefer-dist --no-interaction
+        run: composer update --${{ matrix.dependency-version }} --prefer-dist --no-interaction
+
+      - name: Check code style
+        run: ./vendor/bin/pint --test
+
+      - name: Run static analysis
+        run: ./vendor/bin/phpstan analyse --memory-limit=256M
+
       - name: Run tests
-        run: |
-          ./vendor/bin/phpunit --coverage-clover coverage.xml
-      - uses: codecov/codecov-action@v2
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          fail_ci_if_error: false
+        run: ./vendor/bin/pest --coverage --min=80

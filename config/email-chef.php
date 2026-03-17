@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 return [
     'baseUrl' => 'https://app.emailchef.com/apps/api/v1/',
 
     'login_url' => 'https://app.emailchef.com/api/',
 
-    'username' =>  env('EMAIL_CHEF_USERNAME'),
+    'username' => env('EMAIL_CHEF_USERNAME'),
 
     'password' => env('EMAIL_CHEF_PASSWORD'),
 
