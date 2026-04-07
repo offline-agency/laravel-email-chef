@@ -13,7 +13,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Contacts\GetInstance;
 use OfflineAgency\LaravelEmailChef\Entities\Contacts\UpdatedContactEntity;
 use OfflineAgency\LaravelEmailChef\Entities\Error;
 
-class ContactsApi extends Api
+final class ContactsApi extends Api
 {
     public function count(
         string $list_id,
@@ -23,12 +23,12 @@ class ContactsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $count = $response->data;
 
-        return new CountContactEntity($count);
+        return CountContactEntity::fromResponse($count);
     }
 
     public function getCollection(
@@ -49,15 +49,14 @@ class ContactsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collections = $response->data;
-        // dd(gettype($collection)); //ERROR: $collection è un array, dovrebbe essere un object <-- controllare tutte le chiamate in get
         $out = collect();
 
         foreach ($collections as $collection) {
-            $out->push(new GetCollection($collection));
+            $out->push(GetCollection::fromResponse($collection));
         }
 
         return $out;
@@ -73,12 +72,12 @@ class ContactsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $contact = $response->data;
 
-        return new GetInstance($contact);
+        return GetInstance::fromResponse($contact);
     }
 
     /**
@@ -108,12 +107,12 @@ class ContactsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $contact = $response->data;
 
-        return new CreatedContactEntity($contact);
+        return CreatedContactEntity::fromResponse($contact);
     }
 
     /**
@@ -131,12 +130,12 @@ class ContactsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $contact = $response->data;
 
-        return new UpdatedContactEntity($contact); // to implement
+        return UpdatedContactEntity::fromResponse($contact); // to implement
     }
 
     public function delete(
@@ -148,7 +147,7 @@ class ContactsApi extends Api
         );
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         return 'Contact #'.$contact_id.' deleted from list #'.$list_id;

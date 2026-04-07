@@ -14,7 +14,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Lists\GetInstance;
 use OfflineAgency\LaravelEmailChef\Entities\Lists\GetStats;
 use OfflineAgency\LaravelEmailChef\Entities\Lists\UpdateList;
 
-class ListsApi extends Api
+final class ListsApi extends Api
 {
     public function getCollection(
         ?int $limit,
@@ -30,7 +30,7 @@ class ListsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collections = $response->data;
@@ -39,7 +39,7 @@ class ListsApi extends Api
 
         foreach ($collections as $collection) {
             $collection->date = Carbon::parse($collection->date);
-            $out->push(new GetCollection($collection));
+            $out->push(GetCollection::fromResponse($collection));
         }
 
         return $out;
@@ -53,12 +53,12 @@ class ListsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $list = $response->data;
 
-        return new GetInstance($list);
+        return GetInstance::fromResponse($list);
     }
 
     public function getStats(
@@ -72,12 +72,12 @@ class ListsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $stats = $response->data;
 
-        return new GetStats($stats);
+        return GetStats::fromResponse($stats);
     }
 
     public function unsubscribe(
@@ -90,7 +90,7 @@ class ListsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         // this endpoint does not return response
@@ -119,12 +119,12 @@ class ListsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $list = $response->data;
 
-        return new ContactList($list);
+        return ContactList::fromResponse($list);
     }
 
     /**
@@ -148,12 +148,12 @@ class ListsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $list = $response->data;
 
-        return new UpdateList($list);
+        return UpdateList::fromResponse($list);
     }
 
     public function delete(
@@ -162,7 +162,7 @@ class ListsApi extends Api
         $response = $this->destroy('lists/'.$list_id);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         return 'List #'.$list_id.' deleted';
@@ -178,9 +178,9 @@ class ListsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
-        return new ContactList($response->data);
+        return ContactList::fromResponse($response->data);
     }
 }

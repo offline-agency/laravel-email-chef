@@ -15,7 +15,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Segments\SegmentCount;
 use OfflineAgency\LaravelEmailChef\Entities\Segments\SegmentDeletion;
 use OfflineAgency\LaravelEmailChef\Entities\Segments\UpdateSegment;
 
-class SegmentsApi extends Api
+final class SegmentsApi extends Api
 {
     public function getCollection(
         string $list_id,
@@ -29,14 +29,14 @@ class SegmentsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collections = $response->data;
         $out = collect();
 
         foreach ($collections as $collection) {
-            $out->push(new SegmentCollection($collection));
+            $out->push(SegmentCollection::fromResponse($collection));
         }
 
         return $out;
@@ -50,16 +50,12 @@ class SegmentsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
-
-        // dd($response);
 
         $getInstance = $response->data;
 
-        // dd($getInstance);
-
-        return new Segment($getInstance);
+        return Segment::fromResponse($getInstance);
     }
 
     public function getCount(
@@ -68,12 +64,12 @@ class SegmentsApi extends Api
         $response = $this->get('lists/'.$list_id.'/segments/count?');
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getCount = $response->data;
 
-        return new SegmentCount($getCount);
+        return SegmentCount::fromResponse($getCount);
     }
 
     public function getContactsCount(
@@ -84,12 +80,12 @@ class SegmentsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getContactsCount = $response->data;
 
-        return new ContactsCount($getContactsCount);
+        return ContactsCount::fromResponse($getContactsCount);
     }
 
     /**
@@ -122,12 +118,12 @@ class SegmentsApi extends Api
         $response = $this->post('segments?list_id='.$list_id, $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $createInstance = $response->data;
 
-        return new CreateSegment($createInstance);
+        return CreateSegment::fromResponse($createInstance);
     }
 
     /**
@@ -161,12 +157,12 @@ class SegmentsApi extends Api
         $response = $this->put('segments/'.$segment_id.'?lists_id='.$list_id, $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $updateInstance = $response->data;
 
-        return new UpdateSegment($updateInstance);
+        return UpdateSegment::fromResponse($updateInstance);
     }
 
     public function deleteInstance(
@@ -177,11 +173,11 @@ class SegmentsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $deleteInstance = $response->data;
 
-        return new SegmentDeletion($deleteInstance);
+        return SegmentDeletion::fromResponse($deleteInstance);
     }
 }

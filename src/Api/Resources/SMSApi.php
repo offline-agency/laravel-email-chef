@@ -11,7 +11,7 @@ use OfflineAgency\LaravelEmailChef\Entities\SMS\BulkMessageStatus;
 use OfflineAgency\LaravelEmailChef\Entities\SMS\Send;
 use OfflineAgency\LaravelEmailChef\Entities\SMS\StatusMessage;
 
-class SMSApi extends Api
+final class SMSApi extends Api
 {
     /**
      * @param array<string, mixed> $body
@@ -22,24 +22,24 @@ class SMSApi extends Api
         $response = $this->post('sms/send', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $send = $response->data;
 
-        return new Send($send);
+        return Send::fromResponse($send);
     }
 
     public function getBalance(): mixed {
         $response = $this->get('sms/balance');
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getBalance = $response->data;
 
-        return new Balance($getBalance);
+        return Balance::fromResponse($getBalance);
     }
 
     public function getStatusMessage(
@@ -48,12 +48,12 @@ class SMSApi extends Api
         $response = $this->get('sms/status/'.$messageId);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getStatusMessage = $response->data;
 
-        return new StatusMessage($getStatusMessage);
+        return StatusMessage::fromResponse($getStatusMessage);
     }
 
     public function getBulkMessageStatus(
@@ -62,11 +62,11 @@ class SMSApi extends Api
         $response = $this->get('sms/bulk/status/'.$bulkId);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getBulkMessageStatus = $response->data;
 
-        return new BulkMessageStatus($getBulkMessageStatus);
+        return BulkMessageStatus::fromResponse($getBulkMessageStatus);
     }
 }

@@ -11,14 +11,14 @@ use OfflineAgency\LaravelEmailChef\Entities\ImportTasks\CreatedImportTasksEntity
 use OfflineAgency\LaravelEmailChef\Entities\ImportTasks\GetCollection;
 use OfflineAgency\LaravelEmailChef\Entities\ImportTasks\GetInstance;
 
-class ImportTasksApi extends Api
+final class ImportTasksApi extends Api
 {
     public function getCollection(
     ): mixed {
         $response = $this->get('importtasks', []);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collection = $response->data;
@@ -26,7 +26,7 @@ class ImportTasksApi extends Api
         $out = collect();
 
         foreach ($collection as $collectionItem) {
-            $out->push(new GetCollection($collectionItem));
+            $out->push(GetCollection::fromResponse($collectionItem));
         }
 
         return $out;
@@ -40,12 +40,12 @@ class ImportTasksApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $importtask = $response->data;
 
-        return new GetInstance($importtask);
+        return GetInstance::fromResponse($importtask);
     }
 
     /**
@@ -69,11 +69,11 @@ class ImportTasksApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $importtask = $response->data;
 
-        return new CreatedImportTasksEntity($importtask);
+        return CreatedImportTasksEntity::fromResponse($importtask);
     }
 }

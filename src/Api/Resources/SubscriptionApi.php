@@ -8,15 +8,15 @@ use OfflineAgency\LaravelEmailChef\Api\Api;
 use OfflineAgency\LaravelEmailChef\Entities\Error;
 use OfflineAgency\LaravelEmailChef\Entities\Subscription\SubscriptionEntity;
 
-class SubscriptionApi extends Api
+final class SubscriptionApi extends Api
 {
     public function getCollection(): mixed {
         $response = $this->get('/subscriptions/current');
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
-        return new SubscriptionEntity($response->data);
+        return SubscriptionEntity::fromResponse($response->data);
     }
 }

@@ -10,7 +10,7 @@ use OfflineAgency\LaravelEmailChef\Entities\Blockings\CreatedBlockingsEntity;
 use OfflineAgency\LaravelEmailChef\Entities\Blockings\GetCollection;
 use OfflineAgency\LaravelEmailChef\Entities\Error;
 
-class BlockingsApi extends Api
+final class BlockingsApi extends Api
 {
     public function getCollection(
         string $query_string,
@@ -24,7 +24,7 @@ class BlockingsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collection = $response->data;
@@ -32,7 +32,7 @@ class BlockingsApi extends Api
         $out = collect();
 
         foreach ($collection as $collectionItem) {
-            $out->push(new GetCollection($collectionItem));
+            $out->push(GetCollection::fromResponse($collectionItem));
         }
 
         return $out;
@@ -46,12 +46,12 @@ class BlockingsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $count = $response->data;
 
-        return new CountBlockingsEntity($count);
+        return CountBlockingsEntity::fromResponse($count);
     }
 
     public function create(
@@ -61,12 +61,12 @@ class BlockingsApi extends Api
         $response = $this->post('blockings?email='.$email.'&type='.$type, []);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $blocking = $response->data;
 
-        return new CreatedBlockingsEntity($blocking);
+        return CreatedBlockingsEntity::fromResponse($blocking);
     }
 
     public function delete(
@@ -75,7 +75,7 @@ class BlockingsApi extends Api
         $response = $this->destroy('blockings/'.$email);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         return 'Blocking #'.$email.' deleted';
