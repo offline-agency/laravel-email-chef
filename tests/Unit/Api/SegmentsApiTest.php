@@ -98,7 +98,7 @@ describe('SegmentsApi', function (): void {
             '*'                                   => Http::response(['id' => '20'], 200),
         ]);
 
-        $result = (new SegmentsApi())->createInstance(97322, segmentBody());
+        $result = (new SegmentsApi())->createInstance(97_322, segmentBody());
 
         expect($result)->toBeInstanceOf(CreateSegment::class);
 
