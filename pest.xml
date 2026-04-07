@@ -16,7 +16,6 @@
             <directory suffix=".php">./src</directory>
         </include>
     </source>
-    <coverage/>
     <php>
         <env name="EMAIL_CHEF_USERNAME" value="test_user"/>
         <env name="EMAIL_CHEF_PASSWORD" value="test_password"/>
