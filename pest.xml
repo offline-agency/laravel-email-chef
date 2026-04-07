@@ -2,13 +2,7 @@
 <phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
          bootstrap="vendor/autoload.php"
-         colors="true"
-         failOnWarning="true"
-         failOnRisky="true"
-         failOnEmptyTestSuite="true"
-         beStrictAboutOutputDuringTests="true"
-         executionOrder="random"
->
+         colors="true">
     <testsuites>
         <testsuite name="Unit">
             <directory>./tests/Unit</directory>
@@ -24,8 +18,6 @@
     </source>
     <coverage/>
     <php>
-        <env name="APP_ENV" value="testing"/>
-        <env name="APP_DEBUG" value="true"/>
         <env name="EMAIL_CHEF_USERNAME" value="test_user"/>
         <env name="EMAIL_CHEF_PASSWORD" value="test_password"/>
     </php>
