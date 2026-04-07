@@ -37,13 +37,13 @@ jobs:
 
       - name: Install dependencies
         run: |
-          composer require --dev \
-            "laravel/framework:${{ matrix.laravel }}" \
-            "orchestra/testbench:${{ matrix.testbench }}" \
-            --no-interaction --no-update
           composer update \
             --${{ matrix.dependency-version }} \
-            --prefer-dist --no-interaction
+            --prefer-dist --no-interaction \
+            --with "illuminate/support:${{ matrix.laravel }}" \
+            --with "illuminate/http:${{ matrix.laravel }}" \
+            --with "illuminate/contracts:${{ matrix.laravel }}" \
+            --with "orchestra/testbench:${{ matrix.testbench }}"
 
       - name: Check code style
         run: ./vendor/bin/pint --test
