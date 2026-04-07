@@ -2,7 +2,6 @@
 
 [![Latest Stable Version](https://img.shields.io/packagist/v/offline-agency/laravel-email-chef)](https://packagist.org/packages/offline-agency/laravel-email-chef)
 [![PHP Version](https://img.shields.io/packagist/php-v/offline-agency/laravel-email-chef)](https://packagist.org/packages/offline-agency/laravel-email-chef)
-[![Laravel](https://img.shields.io/badge/Laravel-12.x%20|%2013.x-red)](https://laravel.com)
 [![Tests](https://github.com/offline-agency/laravel-email-chef/actions/workflows/main.yml/badge.svg)](https://github.com/offline-agency/laravel-email-chef/actions)
 [![codecov](https://codecov.io/gh/offline-agency/laravel-email-chef/branch/main/graph/badge.svg)](https://codecov.io/gh/offline-agency/laravel-email-chef)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%206-blue)]()
