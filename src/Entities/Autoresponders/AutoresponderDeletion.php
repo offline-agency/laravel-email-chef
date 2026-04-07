@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Autoresponders;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class AutoresponderDeletion extends AbstractEntity
+final readonly class AutoresponderDeletion
 {
-    public string $status;
+    use Hydratable;
 
-    public string $id;
+    public function __construct(
+        public string $status = '',
+        public string $id = '',
+    ) {}
 }

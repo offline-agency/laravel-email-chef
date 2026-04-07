@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Contacts;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CreatedContactEntity extends AbstractEntity
+final readonly class CreatedContactEntity
 {
-    public bool $contact_added_to_list;
+    use Hydratable;
 
-    public string $contact_id;
-
-    public string $contact_status;
-
-    public bool $updated;
+    public function __construct(
+        public bool $contact_added_to_list = false,
+        public string $contact_id = '',
+        public string $contact_status = '',
+        public bool $updated = false,
+    ) {}
 }

@@ -19,6 +19,16 @@ describe('LaravelEmailChef', function (): void {
         expect($client->getAuthKey())->toBe('real-jwt-token');
     });
 
+    it('throws an Exception when credentials are missing', function (): void {
+        config(['email-chef.username' => null]);
+        config(['email-chef.password' => null]);
+
+        expect(static fn () => new LaravelEmailChef())->toThrow(
+            Exception::class,
+            'Missing Credentials',
+        );
+    });
+
     it('throws an Exception when credentials are wrong', function (): void {
         Http::fake([
             'https://app.emailchef.com/api/login' => Http::response(

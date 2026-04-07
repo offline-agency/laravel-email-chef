@@ -13,7 +13,7 @@ use OfflineAgency\LaravelEmailChef\Entities\CustomFields\GetInstance;
 use OfflineAgency\LaravelEmailChef\Entities\CustomFields\UpdatedCustomFieldsEntity;
 use OfflineAgency\LaravelEmailChef\Entities\Error;
 
-class CustomFieldsApi extends Api
+final class CustomFieldsApi extends Api
 {
     public function getCollection(
         string $list_id,
@@ -23,15 +23,14 @@ class CustomFieldsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collection = $response->data;
-        // dd(gettype($collection)); //ERROR: $collection è un array, dovrebbe essere un object <-- controllare tutte le chiamate in get
         $out = collect();
 
         foreach ($collection as $collectionItem) {
-            $out->push(new GetCollection($collectionItem));
+            $out->push(GetCollection::fromResponse($collectionItem));
         }
 
         return $out;
@@ -45,12 +44,12 @@ class CustomFieldsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $customfield = $response->data;
 
-        return new GetInstance($customfield);
+        return GetInstance::fromResponse($customfield);
     }
 
     public function count(
@@ -61,12 +60,12 @@ class CustomFieldsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $count = $response->data;
 
-        return new CountCustomFieldsEntity($count);
+        return CountCustomFieldsEntity::fromResponse($count);
     }
 
     /**
@@ -92,12 +91,12 @@ class CustomFieldsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $customfield = $response->data;
 
-        return new CreatedCustomFieldsEntity($customfield);
+        return CreatedCustomFieldsEntity::fromResponse($customfield);
     }
 
     /**
@@ -128,12 +127,12 @@ class CustomFieldsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $customfield = $response->data;
 
-        return new UpdatedCustomFieldsEntity($customfield);
+        return UpdatedCustomFieldsEntity::fromResponse($customfield);
     }
 
     public function delete(
@@ -142,7 +141,7 @@ class CustomFieldsApi extends Api
         $response = $this->destroy('customfields/'.$field_id);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         return 'CustomFields #'.$field_id.' deleted';

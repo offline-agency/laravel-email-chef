@@ -4,13 +4,15 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Autoresponders;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class AutoresponderLinks extends AbstractEntity
+final readonly class AutoresponderLinks
 {
-    public string $url;
+    use Hydratable;
 
-    public string $name;
-
-    public string $id;
+    public function __construct(
+        public string $url = '',
+        public string $name = '',
+        public string $id = '',
+    ) {}
 }

@@ -1,41 +1,51 @@
-name: release
+name: Create Release
 
 on:
   push:
     tags:
-      - 'v*.*.*'
+      - "v*.*.*"
+
+permissions:
+  contents: write
 
 jobs:
   release:
     runs-on: ubuntu-latest
+    name: "Release ${{ github.ref_name }}"
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.5'
-          tools: composer
+          php-version: "8.5"
+          coverage: none
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction
 
-      - name: Smoke test
+      - name: Smoke-test before releasing
         run: ./vendor/bin/pest --no-coverage
 
       - name: Generate changelog
+        id: changelog
         uses: orhun/git-cliff-action@v3
         with:
           config: cliff.toml
           args: --latest --strip header
         env:
-          OUTPUT: CHANGELOG_RELEASE.md
+          OUTPUT: RELEASE_NOTES.md
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          body_path: CHANGELOG_RELEASE.md
-          token: ${{ secrets.GITHUB_TOKEN }}
+          name: "Release ${{ github.ref_name }}"
+          body_path: RELEASE_NOTES.md
+          draft: false
+          prerelease: ${{ contains(github.ref_name, '-') }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Campaigns;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CampaignDeletion extends AbstractEntity
+final readonly class CampaignDeletion
 {
-    public string $status;
+    use Hydratable;
 
-    public string $id;
+    public function __construct(
+        public string $status = '',
+        public string $id = '',
+    ) {}
 }

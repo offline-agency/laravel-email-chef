@@ -1,12 +1,12 @@
 # Laravel Email Chef API
 
-[![Latest Stable Version](http://poser.pugx.org/offline-agency/laravel-email-chef/v)](https://packagist.org/packages/offline-agency/laravel-email-chef)
-[![PHP Version Require](http://poser.pugx.org/offline-agency/laravel-email-chef/require/php)](https://packagist.org/packages/offline-agency/laravel-email-chef)
-[![Laravel](https://img.shields.io/badge/Laravel-12.x-red.svg)](https://laravel.com)
-[![run-tests](https://github.com/offline-agency/laravel-email-chef/actions/workflows/main.yml/badge.svg)](https://github.com/offline-agency/laravel-email-chef/actions/workflows/main.yml)
-[![PHPStan](https://img.shields.io/badge/PHPStan-level%206-brightgreen.svg)](https://phpstan.org)
-[![License](http://poser.pugx.org/offline-agency/laravel-email-chef/license)](https://packagist.org/packages/offline-agency/laravel-email-chef)
-[![Total Downloads](http://poser.pugx.org/offline-agency/laravel-email-chef/downloads)](https://packagist.org/packages/offline-agency/laravel-email-chef)
+[![Latest Stable Version](https://img.shields.io/packagist/v/offline-agency/laravel-email-chef)](https://packagist.org/packages/offline-agency/laravel-email-chef)
+[![PHP Version](https://img.shields.io/packagist/php-v/offline-agency/laravel-email-chef)](https://packagist.org/packages/offline-agency/laravel-email-chef)
+[![Tests](https://github.com/offline-agency/laravel-email-chef/actions/workflows/main.yml/badge.svg)](https://github.com/offline-agency/laravel-email-chef/actions)
+[![codecov](https://codecov.io/gh/offline-agency/laravel-email-chef/branch/main/graph/badge.svg)](https://codecov.io/gh/offline-agency/laravel-email-chef)
+[![PHPStan](https://img.shields.io/badge/PHPStan-level%206-blue)]()
+[![Total Downloads](https://img.shields.io/packagist/dt/offline-agency/laravel-email-chef)](https://packagist.org/packages/offline-agency/laravel-email-chef)
+[![License](https://img.shields.io/packagist/l/offline-agency/laravel-email-chef)](LICENSE.md)
 
 A Laravel package for the [EmailChef](https://emailchef.com) API — covering all 14 resource groups with a fluent, typed PHP interface.
 
@@ -14,11 +14,11 @@ A Laravel package for the [EmailChef](https://emailchef.com) API — covering al
 
 ## Requirements
 
-| Dependency  | Version   |
-|-------------|-----------|
-| PHP         | ^8.4      |
-| Laravel     | ^12.0     |
-| testbench   | ^10.0 (dev) |
+| Dependency | Version |
+|---|---|
+| PHP | ^8.4 |
+| Laravel | ^12.0 \| ^13.0 |
+| orchestra/testbench (dev) | ^10.0 \| ^11.0 |
 
 ---
 
@@ -58,7 +58,7 @@ return [
 
 ## Usage
 
-Every API class is instantiated directly — authentication is handled automatically.
+Every API class is instantiated directly — authentication is handled automatically via JWT.
 
 ### Account
 
@@ -66,7 +66,8 @@ Every API class is instantiated directly — authentication is handled automatic
 use OfflineAgency\LaravelEmailChef\Api\Resources\AccountApi;
 
 $account = (new AccountApi())->getCollection();
-// → AccountEntity
+// Returns AccountEntity with id, email, lang, status, subscribers, etc.
+echo $account->email; // "admin@acme.com"
 ```
 
 ### Account Infos
@@ -74,8 +75,12 @@ $account = (new AccountApi())->getCollection();
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\AccountInfosApi;
 
-$info   = (new AccountInfosApi())->getInstance();
-$result = (new AccountInfosApi())->update(['instance_in' => [...]]);
+$api    = new AccountInfosApi();
+$info   = $api->getInstance('12345');
+$result = $api->update([
+    'company_name' => 'Acme Corp',
+    'address'      => 'Via Roma 1, Milan',
+]);
 ```
 
 ### Subscription
@@ -83,8 +88,9 @@ $result = (new AccountInfosApi())->update(['instance_in' => [...]]);
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\SubscriptionApi;
 
-$plans = (new SubscriptionApi())->getCollection();
-// → Collection<SubscriptionEntity>
+$subscription = (new SubscriptionApi())->getCollection();
+echo $subscription->type;            // "premium"
+echo $subscription->plan_expiration; // "2027-01-15"
 ```
 
 ### Lists
@@ -92,15 +98,23 @@ $plans = (new SubscriptionApi())->getCollection();
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\ListsApi;
 
-$lists = (new ListsApi())->getCollection(limit: 10, offset: 0, orderby: 'name', order_type: 'asc');
-$list  = (new ListsApi())->getInstance('97322');
-$stats = (new ListsApi())->getStats('97322');
+$lists = new ListsApi();
 
-(new ListsApi())->create(['list_name' => 'My List', 'list_description' => 'desc']);
-(new ListsApi())->update('97322', ['list_name' => 'Updated']);
-(new ListsApi())->delete('97322');
-(new ListsApi())->subscribe('97322', ['email' => 'user@example.com']);
-(new ListsApi())->unsubscribe('97322', '656023');
+// Browse all lists
+$all = $lists->getCollection(limit: 10, offset: 0, orderby: 'name', order_type: 'asc');
+
+// Get details and stats
+$list  = $lists->getInstance('97322');
+$stats = $lists->getStats('97322', '2024-01-01', '2024-12-31');
+
+// Create, update, delete
+$created = $lists->create(['list_name' => 'Newsletter', 'list_description' => 'Main list']);
+$lists->update('97322', ['list_name' => 'Updated Newsletter', 'list_description' => 'Updated']);
+$lists->delete('97322');
+
+// Subscribe / Unsubscribe
+$lists->subscribe('97322', '656023');
+$lists->unsubscribe('97322', '656023');
 ```
 
 ### Contacts
@@ -108,13 +122,21 @@ $stats = (new ListsApi())->getStats('97322');
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\ContactsApi;
 
-$count    = (new ContactsApi())->count('97322');
-$contacts = (new ContactsApi())->getCollection('97322', 10, 0, 'email', 'asc');
-$contact  = (new ContactsApi())->getInstance('97322', '656023');
+$contacts = new ContactsApi();
 
-(new ContactsApi())->create(['instance_in' => ['list_id' => '97322', 'email' => 'new@example.com']]);
-(new ContactsApi())->update('656023', ['instance_in' => ['email' => 'updated@example.com']]);
-(new ContactsApi())->delete('97322', '656023');
+$count   = $contacts->count('97322');
+$all     = $contacts->getCollection('active', '97322', limit: 25, offset: 0, order_by: 'email', order_type: 'asc');
+$contact = $contacts->getInstance('656023', '97322');
+
+$created = $contacts->create([
+    'list_id' => '97322',
+    'email'   => 'john@example.com',
+    'firstname' => 'John',
+    'lastname'  => 'Doe',
+]);
+
+$contacts->update('656023', ['firstname' => 'Jane']);
+$contacts->delete('97322', '656023');
 ```
 
 ### Predefined Fields
@@ -123,6 +145,7 @@ $contact  = (new ContactsApi())->getInstance('97322', '656023');
 use OfflineAgency\LaravelEmailChef\Api\Resources\PredefinedFieldsApi;
 
 $fields = (new PredefinedFieldsApi())->getCollection();
+// Collection of PredefinedFieldsEntity with id, name, type_id, reference, etc.
 ```
 
 ### Custom Fields
@@ -130,13 +153,15 @@ $fields = (new PredefinedFieldsApi())->getCollection();
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\CustomFieldsApi;
 
-$fields = (new CustomFieldsApi())->getCollection();
-$field  = (new CustomFieldsApi())->getInstance('1');
-$count  = (new CustomFieldsApi())->count();
+$api = new CustomFieldsApi();
 
-(new CustomFieldsApi())->create(['instance_in' => ['name' => 'Birthday', 'type' => 'date']]);
-(new CustomFieldsApi())->update('1', ['instance_in' => ['name' => 'Birth Date']]);
-(new CustomFieldsApi())->delete('1');
+$fields = $api->getCollection('97322');
+$field  = $api->getInstance('42');
+$count  = $api->count('97322');
+
+$api->create('97322', ['name' => 'Birthday', 'type_id' => '3']);
+$api->update('42', ['name' => 'Birth Date']);
+$api->delete('42');
 ```
 
 ### Blockings
@@ -144,11 +169,13 @@ $count  = (new CustomFieldsApi())->count();
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\BlockingsApi;
 
-$list  = (new BlockingsApi())->getCollection('spam@example.com', 10, 0);
-$count = (new BlockingsApi())->count('spam@example.com');
+$api = new BlockingsApi();
 
-(new BlockingsApi())->create('block@example.com', 'email');
-(new BlockingsApi())->delete('block@example.com');
+$blocked = $api->getCollection('spam', limit: 10, offset: 0);
+$count   = $api->count('spam');
+
+$api->create('block@example.com', 'email');
+$api->delete('block@example.com');
 ```
 
 ### Import Tasks
@@ -156,10 +183,17 @@ $count = (new BlockingsApi())->count('spam@example.com');
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\ImportTasksApi;
 
-$tasks = (new ImportTasksApi())->getCollection(10, 0);
-$task  = (new ImportTasksApi())->getInstance('42');
+$api = new ImportTasksApi();
 
-(new ImportTasksApi())->create(['instance_in' => ['list_id' => '97322', 'contacts' => [...]]]);
+$tasks = $api->getCollection();
+$task  = $api->getInstance('101');
+
+$api->create('97322', [
+    'contacts' => [
+        ['email' => 'a@example.com', 'firstname' => 'Alice'],
+        ['email' => 'b@example.com', 'firstname' => 'Bob'],
+    ],
+]);
 ```
 
 ### Segments
@@ -167,14 +201,20 @@ $task  = (new ImportTasksApi())->getInstance('42');
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\SegmentsApi;
 
-$segments = (new SegmentsApi())->getCollection('97322', 10, 0);
-$segment  = (new SegmentsApi())->getInstance('5');
-$count    = (new SegmentsApi())->getCount('97322');
-$contacts = (new SegmentsApi())->getContactsCount('5');
+$api = new SegmentsApi();
 
-(new SegmentsApi())->createInstance(97322, ['instance_in' => [...]]);
-(new SegmentsApi())->updateInstance('97322', '5', ['instance_in' => [...]]);
-(new SegmentsApi())->deleteInstance('5');
+$segments      = $api->getCollection('97322', limit: 10, offset: 0);
+$segment       = $api->getInstance('5');
+$segmentCount  = $api->getCount('97322');
+$contactsCount = $api->getContactsCount('5');
+
+$api->createInstance(97322, [
+    'name'  => 'VIP Customers',
+    'logic' => 'and',
+    'condition_groups' => [['field' => 'email', 'operator' => 'contains', 'value' => '@acme.com']],
+]);
+$api->updateInstance('97322', '5', ['name' => 'Premium VIPs']);
+$api->deleteInstance('5');
 ```
 
 ### Campaigns
@@ -182,21 +222,30 @@ $contacts = (new SegmentsApi())->getContactsCount('5');
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\CampaignsApi;
 
-$count     = (new CampaignsApi())->getCount();
-$campaigns = (new CampaignsApi())->getCollection('active', 10, 0, 'name', 'asc');
-$campaign  = (new CampaignsApi())->getInstance('10');
+$api = new CampaignsApi();
 
-(new CampaignsApi())->createInstance(['instance_in' => [...]]);
-(new CampaignsApi())->updateInstance('10', ['instance_in' => [...]]);
-(new CampaignsApi())->deleteInstance('10');
-(new CampaignsApi())->sendTestEmail('10', ['instance_in' => ['email' => 'test@example.com']]);
-(new CampaignsApi())->sendCampaign('10', []);
-(new CampaignsApi())->schedule('10', ['instance_in' => ['send_time' => '2025-12-01 09:00:00']]);
-(new CampaignsApi())->cancelScheduling('10');
-(new CampaignsApi())->archive('10');
-(new CampaignsApi())->unarchive('10');
-(new CampaignsApi())->cloning(['instance_in' => ['id' => '10']]);
-(new CampaignsApi())->getLinkCollection('10');
+$count     = $api->getCount();
+$campaigns = $api->getCollection('sent', limit: 10, offset: 0, orderby: 'name', ordertype: 'asc');
+$campaign  = $api->getInstance('10');
+
+$api->createInstance([
+    'name'       => 'Summer Sale',
+    'subject'    => 'Up to 50% off',
+    'from_name'  => 'Acme Store',
+    'from_email' => 'hello@acme.com',
+    'html_body'  => '<h1>Summer Sale!</h1><p>Shop now.</p>',
+]);
+$api->updateInstance('10', ['subject' => 'Extended: Summer Sale']);
+$api->deleteInstance('10');
+
+$api->sendTestEmail('10', ['email' => 'test@acme.com']);
+$api->sendCampaign('10', []);
+$api->schedule('10', ['send_time' => '2026-07-01 09:00:00']);
+$api->cancelScheduling('10');
+$api->archive('10');
+$api->unarchive('10');
+$api->cloning(['id' => '10']);
+$api->getLinkCollection('10');
 ```
 
 ### Autoresponders
@@ -204,18 +253,25 @@ $campaign  = (new CampaignsApi())->getInstance('10');
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\AutorespondersApi;
 
-$count = (new AutorespondersApi())->getCount();
-$list  = (new AutorespondersApi())->getCollection(10, 0, 'name', 'asc');
-$ar    = (new AutorespondersApi())->getInstance('20');
+$api = new AutorespondersApi();
 
-(new AutorespondersApi())->createInstance(['instance_in' => [...]]);
-(new AutorespondersApi())->updateInstance('20', ['instance_in' => [...]]);
-(new AutorespondersApi())->deleteInstance('20');
-(new AutorespondersApi())->sendTestEmail('20', ['instance_in' => ['email' => 'test@example.com']]);
-(new AutorespondersApi())->activate('20', []);
-(new AutorespondersApi())->deactivate('20', []);
-(new AutorespondersApi())->cloning(['instance_in' => ['id' => '20']]);
-(new AutorespondersApi())->getLinksCollection('20');
+$count = $api->getCount();
+$list  = $api->getCollection(limit: 10, offset: 0, orderby: 'name', ordertype: 'asc');
+$ar    = $api->getInstance('20');
+
+$api->createInstance([
+    'name'      => 'Welcome Email',
+    'subject'   => 'Welcome aboard!',
+    'html_body' => '<p>Thanks for joining.</p>',
+]);
+$api->updateInstance('20', ['subject' => 'Welcome to Acme!']);
+$api->deleteInstance('20');
+
+$api->sendTestEmail('20', ['email' => 'test@acme.com']);
+$api->activate('20', []);
+$api->deactivate('20', []);
+$api->cloning(['id' => '20']);
+$api->getLinksCollection('20');
 ```
 
 ### Send Mail (transactional)
@@ -225,8 +281,8 @@ use OfflineAgency\LaravelEmailChef\Api\Resources\SendEmailApi;
 
 (new SendEmailApi())->sendMail([
     'to'      => 'customer@example.com',
-    'subject' => 'Your order is ready',
-    'html'    => '<p>Thank you for your order!</p>',
+    'subject' => 'Your order has shipped',
+    'html'    => '<p>Track your order <a href="https://track.acme.com/123">here</a>.</p>',
 ]);
 ```
 
@@ -235,43 +291,46 @@ use OfflineAgency\LaravelEmailChef\Api\Resources\SendEmailApi;
 ```php
 use OfflineAgency\LaravelEmailChef\Api\Resources\SMSApi;
 
-(new SMSApi())->send(['to' => '+39 333 1234567', 'text' => 'Your code is 4821.']);
-(new SMSApi())->getBalance();
-(new SMSApi())->getStatusMessage('sms-123');
-(new SMSApi())->getBulkMessageStatus('bulk-1');
+$sms = new SMSApi();
+
+$sms->send(['to' => '+39 333 1234567', 'text' => 'Your verification code is 4821.']);
+$sms->getBalance();                    // Balance entity with ->balance, ->currency
+$sms->getStatusMessage('msg-abc123');  // StatusMessage entity
+$sms->getBulkMessageStatus('bulk-1');  // BulkMessageStatus entity
 ```
 
 ---
 
 ## API Coverage
 
-| Group            | Class               | Methods                                                                                                       |
-|------------------|---------------------|---------------------------------------------------------------------------------------------------------------|
-| Account          | AccountApi          | `getCollection()`                                                                                             |
-| Account Infos    | AccountInfosApi     | `getInstance()`, `update()`                                                                                   |
-| Subscription     | SubscriptionApi     | `getCollection()`                                                                                             |
-| Lists            | ListsApi            | `getCollection()`, `getInstance()`, `getStats()`, `create()`, `update()`, `delete()`, `subscribe()`, `unsubscribe()` |
-| Contacts         | ContactsApi         | `count()`, `getCollection()`, `getInstance()`, `create()`, `update()`, `delete()`                            |
-| Predefined Fields | PredefinedFieldsApi | `getCollection()`                                                                                             |
-| Custom Fields    | CustomFieldsApi     | `getCollection()`, `getInstance()`, `count()`, `create()`, `update()`, `delete()`                            |
-| Blockings        | BlockingsApi        | `getCollection()`, `count()`, `create()`, `delete()`                                                         |
-| Import Tasks     | ImportTasksApi      | `getCollection()`, `getInstance()`, `create()`                                                                |
-| Segments         | SegmentsApi         | `getCollection()`, `getInstance()`, `getCount()`, `getContactsCount()`, `createInstance()`, `updateInstance()`, `deleteInstance()` |
-| Campaigns        | CampaignsApi        | `getCount()`, `getCollection()`, `getInstance()`, `createInstance()`, `updateInstance()`, `deleteInstance()`, `sendTestEmail()`, `sendCampaign()`, `schedule()`, `cancelScheduling()`, `archive()`, `unarchive()`, `cloning()`, `getLinkCollection()` |
-| Autoresponders   | AutorespondersApi   | `getCount()`, `getCollection()`, `getInstance()`, `createInstance()`, `updateInstance()`, `deleteInstance()`, `sendTestEmail()`, `activate()`, `deactivate()`, `cloning()`, `getLinksCollection()` |
-| Send Mail        | SendEmailApi        | `sendMail()`                                                                                                  |
-| SMS              | SMSApi              | `send()`, `getBalance()`, `getStatusMessage()`, `getBulkMessageStatus()`                                     |
+| Group             | Status |
+|-------------------|--------|
+| Account           | ✅     |
+| Account Infos     | ✅     |
+| Subscription      | ✅     |
+| Lists             | ✅     |
+| Contacts          | ✅     |
+| Predefined Fields | ✅     |
+| Custom Fields     | ✅     |
+| Blockings         | ✅     |
+| Import Tasks      | ✅     |
+| Segments          | ✅     |
+| Campaigns         | ✅     |
+| Autoresponders    | ✅     |
+| Send Mail         | ✅     |
+| SMS               | ✅     |
 
 ---
 
 ## Testing
 
 ```bash
-composer test              # run all tests
-composer test-coverage     # run with coverage report
-composer analyse           # PHPStan level 6
-composer lint              # fix code style
-composer lint:test         # check code style (no changes)
+composer test                            # run all tests
+./vendor/bin/pest --coverage             # with coverage report
+./vendor/bin/pest --coverage --min=80    # enforce coverage gate
+composer analyse                         # static analysis (PHPStan level 6)
+composer lint                            # fix code style
+composer lint:test                       # check code style (dry-run)
 ```
 
 ---
@@ -292,3 +351,124 @@ Please report security issues to support@offlineagency.com.
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
+
+---
+
+## Proposed Improvements
+
+> **Note:** This section is a review aid for PR #11. It will be removed before merging.
+
+### Proposal 1 — JWT token caching
+
+**Current:** A new JWT token is fetched via `POST /login` on every API class instantiation.
+
+**Proposed:** Cache the token using Laravel's Cache facade with a TTL slightly shorter than server-side expiry (e.g. 55 minutes):
+
+```php
+use Illuminate\Support\Facades\Cache;
+
+private function getToken(): string
+{
+    return Cache::remember('emailchef_jwt', now()->addMinutes(55), function (): string {
+        $response = Http::post(config('email-chef.login_url').'login', [
+            'username' => config('email-chef.username'),
+            'password' => config('email-chef.password'),
+        ]);
+        return $response->json('authkey');
+    });
+}
+```
+
+**Effort:** Low. **Impact:** Eliminates redundant auth round-trips.
+
+---
+
+### Proposal 2 — Exception hierarchy
+
+**Current:** API errors return an `Error` entity. Consumers cannot catch specific error types.
+
+**Proposed:** Create `src/Exceptions/` hierarchy:
+
+```
+EmailChefException (base)
+├── AuthenticationException   (401)
+├── NotFoundException          (404)
+├── ValidationException        (422 — carries field errors)
+├── RateLimitException         (429 — includes Retry-After value)
+└── ServerException            (5xx)
+```
+
+**Effort:** Medium. **Impact:** High — enables typed error handling.
+
+---
+
+### Proposal 3 — EmailChef Facade
+
+**Current:** Users instantiate each API class manually (`new ListsApi()`).
+
+**Proposed:** A single-entry-point facade:
+
+```php
+use OfflineAgency\LaravelEmailChef\Facades\EmailChef;
+
+EmailChef::lists()->getCollection(limit: 10, offset: 0, orderby: 'name', order_type: 'asc');
+EmailChef::contacts()->count(listId: '97322');
+EmailChef::campaigns()->sendCampaign('42', []);
+```
+
+**Effort:** Low-medium. **Impact:** High ergonomic value.
+
+---
+
+### Proposal 4 — Pagination abstraction
+
+**Current:** List endpoints return a single page. No standard way to iterate beyond page 1.
+
+**Proposed:** A `PaginatedResponse` value object with `hasMorePages()` and an `->all()` convenience method that auto-fetches all pages.
+
+**Effort:** Medium. **Impact:** Important for large contact lists.
+
+---
+
+### Proposal 5 — Config type-safety
+
+**Current:** Config keys like `'email-chef.baseUrl'` are raw strings. A typo silently returns `null`.
+
+**Proposed:** A `src/EmailChefConfig.php` class with static accessors that throw on missing config:
+
+```php
+final class EmailChefConfig
+{
+    public static function baseUrl(): string
+    {
+        return config('email-chef.baseUrl') ?? throw new \RuntimeException('EmailChef baseUrl not configured.');
+    }
+}
+```
+
+**Effort:** Low. **Impact:** IDE autocompletion + early failure on misconfiguration.
+
+---
+
+### Proposal 6 — Laravel 13 attribute adoption in examples
+
+Laravel 13 introduced first-party PHP Attribute support. The README examples could demonstrate modern L13 usage patterns:
+
+```php
+use Illuminate\Routing\Attributes\Controllers\Middleware;
+
+#[Middleware('auth')]
+class NewsletterController
+{
+    public function subscribe(Request $request): JsonResponse
+    {
+        (new ListsApi())->subscribe(
+            listId: config('email-chef.list_id'),
+            data: $request->validated(),
+        );
+        return response()->json(['subscribed' => true]);
+    }
+}
+```
+
+**Effort:** Documentation only.

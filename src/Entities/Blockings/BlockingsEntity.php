@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Blockings;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class BlockingsEntity extends AbstractEntity // todo: check the variables
+final readonly class BlockingsEntity
 {
-    public string $email;
+    use Hydratable;
 
-    public string $type;
+    public function __construct(
+        public string $email = '',
+        public string $type = '',
+    ) {}
 }

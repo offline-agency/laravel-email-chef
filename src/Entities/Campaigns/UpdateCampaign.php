@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Campaigns;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class UpdateCampaign extends AbstractEntity
+final readonly class UpdateCampaign
 {
-    public object $body;
+    use Hydratable;
+
+    public function __construct(
+        public ?object $body = null,
+    ) {}
 }

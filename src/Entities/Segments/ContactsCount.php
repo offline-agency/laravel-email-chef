@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Segments;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class ContactsCount extends AbstractEntity
+final readonly class ContactsCount
 {
-    public string $match_count;
+    use Hydratable;
 
-    public string $total_count;
+    public function __construct(
+        public string $match_count = '',
+        public string $total_count = '',
+    ) {}
 }

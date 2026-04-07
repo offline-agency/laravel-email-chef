@@ -4,7 +4,11 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities;
 
-class Error extends AbstractEntity
+final readonly class Error
 {
-    public object $error;
+    use Hydratable;
+
+    public function __construct(
+        public ?object $error = null,
+    ) {}
 }

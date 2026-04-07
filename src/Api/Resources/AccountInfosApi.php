@@ -9,7 +9,7 @@ use OfflineAgency\LaravelEmailChef\Api\Api;
 use OfflineAgency\LaravelEmailChef\Entities\AccountInfos\GetInstance;
 use OfflineAgency\LaravelEmailChef\Entities\Error;
 
-class AccountInfosApi extends Api
+final class AccountInfosApi extends Api
 {
     public function getInstance(
         string $accountId,
@@ -17,10 +17,10 @@ class AccountInfosApi extends Api
         $response = $this->get('account_infos/'.$accountId);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
-        return new GetInstance($response->data);
+        return GetInstance::fromResponse($response->data);
     }
 
     /**
@@ -50,7 +50,7 @@ class AccountInfosApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         return $response->data;

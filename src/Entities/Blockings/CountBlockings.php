@@ -2,11 +2,15 @@
 
 declare(strict_types=1);
 
-namespace OfflineAgency\LaraEmail\Entities\Blockings;
+namespace OfflineAgency\LaravelEmailChef\Entities\Blockings;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CountBlockings extends AbstractEntity
+final readonly class CountBlockings
 {
-    public string $totalcount;
+    use Hydratable;
+
+    public function __construct(
+        public string $totalcount = '',
+    ) {}
 }

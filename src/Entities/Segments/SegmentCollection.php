@@ -4,19 +4,18 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Segments;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class SegmentCollection extends AbstractEntity
+final readonly class SegmentCollection
 {
-    public string $id;
+    use Hydratable;
 
-    public string $name;
-
-    public string $description;
-
-    public string $match_count;
-
-    public string $total_count;
-
-    public mixed $last_refresh_time;
+    public function __construct(
+        public string $id = '',
+        public string $name = '',
+        public string $description = '',
+        public string $match_count = '',
+        public string $total_count = '',
+        public mixed $last_refresh_time = null,
+    ) {}
 }

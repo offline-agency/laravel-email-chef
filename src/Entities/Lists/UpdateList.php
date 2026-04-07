@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Lists;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class UpdateList extends AbstractEntity
+final readonly class UpdateList
 {
-    public string $list_id;
+    use Hydratable;
+
+    public function __construct(
+        public string $list_id = '',
+    ) {}
 }

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Campaigns;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class SendCampaign extends AbstractEntity
+final readonly class SendCampaign
 {
-    public string $status;
+    use Hydratable;
+
+    public function __construct(
+        public string $status = '',
+    ) {}
 }

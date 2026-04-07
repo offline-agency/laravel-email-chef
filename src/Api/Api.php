@@ -42,14 +42,6 @@ class Api extends LaravelEmailChef
 
         $response = $this->header->post($complete_url, $body);
 
-        $response_status = $response->status();
-
-        //        if ($response_status === 403 || $response_status === 429) {
-        //            $this->waitThrottle($response_status);
-        //
-        //            $this->post($url, $body);
-        //        }
-
         return $this->parseResponse($response);
     }
 
@@ -97,41 +89,14 @@ class Api extends LaravelEmailChef
         return $this->parseResponse($response);
     }
 
-    /**
-     * @param array<string, mixed> $data
-     * @param array<string>        $fields
-     *
-     * @return array<string, mixed>
-     */
-    protected function data(
-        array $data,
-        array $fields,
-    ): array {
-        $parsed_data = [];
-
-        foreach ($data as $key => $value) {
-            if (in_array($key, $fields)) {
-                $parsed_data[$key] = $value;
-            }
-        }
-
-        return $parsed_data;
-    }
-
     private function waitThrottle(
         int $status,
     ): void {
-        switch ($status) {
-            case 403:
-                usleep(config('email-chef.limits.403'));
-                break;
-            case 429:
-                usleep(config('email-chef.limits.429'));
-                break;
-            default:
-                usleep(config('email-chef.limits.default'));
-                break;
-        }
+        match ($status) {
+            403     => usleep(config('email-chef.limits.403')),
+            429     => usleep(config('email-chef.limits.429')),
+            default => usleep(config('email-chef.limits.default')),
+        };
     }
 
     private function parseResponse(Response $response): object {

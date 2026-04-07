@@ -4,15 +4,16 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Contacts;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CountContactEntity extends AbstractEntity
+final readonly class CountContactEntity
 {
-    public string $active;
+    use Hydratable;
 
-    public string $unsubscribed;
-
-    public string $bounced;
-
-    public string $reported;
+    public function __construct(
+        public string $active = '',
+        public string $unsubscribed = '',
+        public string $bounced = '',
+        public string $reported = '',
+    ) {}
 }

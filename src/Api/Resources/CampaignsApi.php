@@ -21,18 +21,18 @@ use OfflineAgency\LaravelEmailChef\Entities\Campaigns\SendTestEmail;
 use OfflineAgency\LaravelEmailChef\Entities\Campaigns\UpdateCampaign;
 use OfflineAgency\LaravelEmailChef\Entities\Error;
 
-class CampaignsApi extends Api
+final class CampaignsApi extends Api
 {
     public function getCount(): mixed {
         $response = $this->get('campaigns/count');
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getCount = $response->data;
 
-        return new CampaignCount($getCount);
+        return CampaignCount::fromResponse($getCount);
     }
 
     public function getCollection(
@@ -51,14 +51,14 @@ class CampaignsApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collections = $response->data;
         $out = collect();
 
         foreach ($collections as $collection) {
-            $out->push(new CampaignCollection($collection));
+            $out->push(CampaignCollection::fromResponse($collection));
         }
 
         return $out;
@@ -70,12 +70,12 @@ class CampaignsApi extends Api
         $response = $this->get('campaigns/'.$id);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getInstance = $response->data;
 
-        return new Campaign($getInstance);
+        return Campaign::fromResponse($getInstance);
     }
 
     /**
@@ -118,12 +118,12 @@ class CampaignsApi extends Api
         $response = $this->post('newsletters', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $createInstance = (object) $response->data;
 
-        return new CreateCampaign($createInstance);
+        return CreateCampaign::fromResponse($createInstance);
     }
 
     /**
@@ -167,12 +167,12 @@ class CampaignsApi extends Api
         $response = $this->put('newsletters/'.$id, $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $updateInstance = $response->data;
 
-        return new UpdateCampaign($updateInstance);
+        return UpdateCampaign::fromResponse($updateInstance);
     }
 
     public function deleteInstance(
@@ -181,12 +181,12 @@ class CampaignsApi extends Api
         $response = $this->destroy('campaigns/'.$id);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $deleteInstance = (object) $response->data;
 
-        return new CampaignDeletion($deleteInstance);
+        return CampaignDeletion::fromResponse($deleteInstance);
     }
 
     /**
@@ -209,12 +209,12 @@ class CampaignsApi extends Api
         $response = $this->post('campaigns/'.$id.'/launcher', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $sendTestEmail = $response->data;
 
-        return new SendTestEmail($sendTestEmail);
+        return SendTestEmail::fromResponse($sendTestEmail);
     }
 
     /**
@@ -227,12 +227,12 @@ class CampaignsApi extends Api
         $response = $this->post('campaigns/'.$id.'/launcher', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $sendCampaign = $response->data;
 
-        return new SendCampaign($sendCampaign);
+        return SendCampaign::fromResponse($sendCampaign);
     }
 
     /**
@@ -245,12 +245,12 @@ class CampaignsApi extends Api
         $response = $this->post('campaigns/'.$id.'/launcher', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $schedule = $response->data;
 
-        return new Schedule($schedule);
+        return Schedule::fromResponse($schedule);
     }
 
     public function cancelScheduling(
@@ -259,12 +259,12 @@ class CampaignsApi extends Api
         $response = $this->put('campaigns/'.$id.'/cancelscheduling', []);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $cancelScheduling = $response->data;
 
-        return new CancelScheduling($cancelScheduling);
+        return CancelScheduling::fromResponse($cancelScheduling);
     }
 
     public function archive(
@@ -273,12 +273,12 @@ class CampaignsApi extends Api
         $response = $this->put('campaigns/'.$id.'/archivecampaign', []);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $archive = $response->data;
 
-        return new CampaignArchiving($archive);
+        return CampaignArchiving::fromResponse($archive);
     }
 
     public function unarchive(
@@ -287,12 +287,12 @@ class CampaignsApi extends Api
         $response = $this->put('campaigns/'.$campaign_id.'/unarchivecampaign', []);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $unarchive = $response->data;
 
-        return new CampaignArchiving($unarchive);
+        return CampaignArchiving::fromResponse($unarchive);
     }
 
     /**
@@ -312,12 +312,12 @@ class CampaignsApi extends Api
         $response = $this->post('newsletters?clone=1', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $clone = $response->data;
 
-        return new Cloning($clone);
+        return Cloning::fromResponse($clone);
     }
 
     public function getLinkCollection(
@@ -326,11 +326,11 @@ class CampaignsApi extends Api
         $response = $this->get('newsletters/'.$id.'/links');
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getLinkCollection = (object) $response->data;
 
-        return new LinkCollection($getLinkCollection);
+        return LinkCollection::fromResponse($getLinkCollection);
     }
 }

@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\SMS;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class Balance extends AbstractEntity
+final readonly class Balance
 {
-    public float $balance;
+    use Hydratable;
 
-    public string $currency;
+    public function __construct(
+        public float $balance = 0.0,
+        public string $currency = '',
+    ) {}
 }

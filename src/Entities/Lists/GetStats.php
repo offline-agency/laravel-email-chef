@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Lists;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class GetStats extends AbstractEntity
+final readonly class GetStats
 {
-    /** @var array<mixed> */
-    public array $total_list;
+    use Hydratable;
 
-    /** @var array<mixed> */
-    public array $daily_delta_list;
-
-    public string $start_date;
-
-    public string $last_date;
+    public function __construct(
+        /** @var array<mixed> */
+        public array $total_list = [],
+        /** @var array<mixed> */
+        public array $daily_delta_list = [],
+        public string $start_date = '',
+        public string $last_date = '',
+    ) {}
 }

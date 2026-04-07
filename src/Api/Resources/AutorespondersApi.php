@@ -18,18 +18,18 @@ use OfflineAgency\LaravelEmailChef\Entities\Autoresponders\SendTestEmail;
 use OfflineAgency\LaravelEmailChef\Entities\Autoresponders\UpdateAutoresponder;
 use OfflineAgency\LaravelEmailChef\Entities\Error;
 
-class AutorespondersApi extends Api
+final class AutorespondersApi extends Api
 {
     public function getCount(): mixed {
         $response = $this->get('autoresponders/count');
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getCount = $response->data;
 
-        return new AutoresponderCount($getCount);
+        return AutoresponderCount::fromResponse($getCount);
     }
 
     public function getCollection(
@@ -46,14 +46,14 @@ class AutorespondersApi extends Api
         ]);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $collections = $response->data;
         $out = collect();
 
         foreach ($collections as $collection) {
-            $out->push(new AutoresponderCollection($collection));
+            $out->push(AutoresponderCollection::fromResponse($collection));
         }
 
         return $out;
@@ -65,12 +65,12 @@ class AutorespondersApi extends Api
         $response = $this->get('autoresponders/'.$id);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getInstance = $response->data;
 
-        return new Autoresponder($getInstance);
+        return Autoresponder::fromResponse($getInstance);
     }
 
     /**
@@ -117,12 +117,12 @@ class AutorespondersApi extends Api
         $response = $this->post('newsletters', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $create = $response->data;
 
-        return new CreateAutoresponder($create);
+        return CreateAutoresponder::fromResponse($create);
     }
 
     /**
@@ -170,12 +170,12 @@ class AutorespondersApi extends Api
         $response = $this->put('newsletters/'.$id, $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $updateInstance = $response->data;
 
-        return new UpdateAutoresponder($updateInstance);
+        return UpdateAutoresponder::fromResponse($updateInstance);
     }
 
     public function deleteInstance(
@@ -183,14 +183,13 @@ class AutorespondersApi extends Api
     ): mixed {
         $response = $this->destroy('newsletters/'.$id);
 
-        // dd($response);
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $deleteInstance = (object) $response->data;
 
-        return new AutoresponderDeletion($deleteInstance);
+        return AutoresponderDeletion::fromResponse($deleteInstance);
     }
 
     /**
@@ -213,12 +212,12 @@ class AutorespondersApi extends Api
         $response = $this->post('autoresponders/'.$id.'/launcher', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $sendTestEmail = $response->data;
 
-        return new SendTestEmail($sendTestEmail);
+        return SendTestEmail::fromResponse($sendTestEmail);
     }
 
     /**
@@ -231,12 +230,12 @@ class AutorespondersApi extends Api
         $response = $this->put('newsletters/'.$id.'?activate=1', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $activate = $response->data;
 
-        return new AutoresponderActivation($activate);
+        return AutoresponderActivation::fromResponse($activate);
     }
 
     /**
@@ -249,12 +248,12 @@ class AutorespondersApi extends Api
         $response = $this->put('newsletters/'.$id.'?activate=-1', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $deactivate = $response->data;
 
-        return new AutoresponderActivation($deactivate);
+        return AutoresponderActivation::fromResponse($deactivate);
     }
 
     /**
@@ -274,12 +273,12 @@ class AutorespondersApi extends Api
         $response = $this->post('newsletters?clone=1', $body);
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $clone = $response->data;
 
-        return new Cloning($clone);
+        return Cloning::fromResponse($clone);
     }
 
     public function getLinksCollection(
@@ -288,11 +287,11 @@ class AutorespondersApi extends Api
         $response = $this->get('newsletters/'.$id.'/links');
 
         if (! $response->success) {
-            return new Error($response->data);
+            return Error::fromResponse($response->data);
         }
 
         $getLinksCollection = (object) $response->data;
 
-        return new AutoresponderLinks($getLinksCollection);
+        return AutoresponderLinks::fromResponse($getLinksCollection);
     }
 }
