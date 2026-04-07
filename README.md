@@ -6,6 +6,7 @@
 [![Tests](https://github.com/offline-agency/laravel-email-chef/actions/workflows/main.yml/badge.svg)](https://github.com/offline-agency/laravel-email-chef/actions)
 [![codecov](https://codecov.io/gh/offline-agency/laravel-email-chef/branch/main/graph/badge.svg)](https://codecov.io/gh/offline-agency/laravel-email-chef)
 [![PHPStan](https://img.shields.io/badge/PHPStan-level%206-blue)]()
+[![Total Downloads](https://img.shields.io/packagist/dt/offline-agency/laravel-email-chef)](https://packagist.org/packages/offline-agency/laravel-email-chef)
 [![License](https://img.shields.io/packagist/l/offline-agency/laravel-email-chef)](LICENSE.md)
 
 A Laravel package for the [EmailChef](https://emailchef.com) API — covering all 14 resource groups with a fluent, typed PHP interface.
