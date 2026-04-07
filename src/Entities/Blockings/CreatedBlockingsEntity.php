@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Blockings;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CreatedBlockingsEntity extends AbstractEntity
+final readonly class CreatedBlockingsEntity
 {
-    public string $address;
+    use Hydratable;
+
+    public function __construct(
+        public string $address = '',
+    ) {}
 }

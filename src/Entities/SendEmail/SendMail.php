@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\SendEmail;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class SendMail extends AbstractEntity
+final readonly class SendMail
 {
-    public object $body;
+    use Hydratable;
+
+    public function __construct(
+        public ?object $body = null,
+    ) {}
 }

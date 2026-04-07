@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Segments;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CreateSegment extends AbstractEntity
+final readonly class CreateSegment
 {
-    public object $body;
+    use Hydratable;
+
+    public function __construct(
+        public ?object $body = null,
+    ) {}
 }

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Autoresponders;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class AutoresponderCount extends AbstractEntity
+final readonly class AutoresponderCount
 {
-    public string $totalcount;
+    use Hydratable;
+
+    public function __construct(
+        public string $totalcount = '',
+    ) {}
 }

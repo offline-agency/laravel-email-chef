@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Segments;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class SegmentCount extends AbstractEntity
+final readonly class SegmentCount
 {
-    public string $totalcount;
+    use Hydratable;
+
+    public function __construct(
+        public string $totalcount = '',
+    ) {}
 }

@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\AccountInfos;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class GetInstance extends AbstractEntity
+final readonly class GetInstance
 {
-    public ?object $billingInfo;
+    use Hydratable;
+
+    public function __construct(
+        public ?object $billingInfo = null,
+    ) {}
 }

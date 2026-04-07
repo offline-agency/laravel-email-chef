@@ -5,31 +5,24 @@ declare(strict_types=1);
 namespace OfflineAgency\LaravelEmailChef\Entities\Lists;
 
 use Carbon\Carbon;
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class GetCollection extends AbstractEntity
+final readonly class GetCollection
 {
-    public string $name;
+    use Hydratable;
 
-    public string $id;
-
-    public ?string $description;
-
-    public Carbon $date;
-
-    public mixed $demo;
-
-    public string $active;
-
-    public string $subscribed;
-
-    public string $unsubscribed;
-
-    public string $bounced;
-
-    public string $reported;
-
-    public string $segments;
-
-    public int $forms;
+    public function __construct(
+        public string $name = '',
+        public string $id = '',
+        public ?string $description = null,
+        public ?Carbon $date = null,
+        public mixed $demo = null,
+        public string $active = '',
+        public string $subscribed = '',
+        public string $unsubscribed = '',
+        public string $bounced = '',
+        public string $reported = '',
+        public string $segments = '',
+        public int $forms = 0,
+    ) {}
 }

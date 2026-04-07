@@ -4,35 +4,26 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Campaigns;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CampaignCollection extends AbstractEntity
+final readonly class CampaignCollection
 {
-    public string $id;
+    use Hydratable;
 
-    public string $sender_id;
-
-    public string $name;
-
-    public string $date;
-
-    public string $status;
-
-    public mixed $scheduled_time;
-
-    public mixed $send_time;
-
-    public string $recipients;
-
-    public string $queue_num;
-
-    public string $success_num;
-
-    public int $delivered;
-
-    public int $unique_opened;
-
-    public int $unique_clicked;
-
-    public int $attempted;
+    public function __construct(
+        public string $id = '',
+        public string $sender_id = '',
+        public string $name = '',
+        public string $date = '',
+        public string $status = '',
+        public mixed $scheduled_time = null,
+        public mixed $send_time = null,
+        public string $recipients = '',
+        public string $queue_num = '',
+        public string $success_num = '',
+        public int $delivered = 0,
+        public int $unique_opened = 0,
+        public int $unique_clicked = 0,
+        public int $attempted = 0,
+    ) {}
 }

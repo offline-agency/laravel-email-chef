@@ -4,21 +4,19 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\PredefinedFields;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class PredefinedFieldsEntity extends AbstractEntity
+final readonly class PredefinedFieldsEntity
 {
-    public string $id;
+    use Hydratable;
 
-    public string $name;
-
-    public string $type_id;
-
-    public string $place_holder;
-
-    public string $reference;
-
-    public string $mandatory;
-
-    public string $data_type;
+    public function __construct(
+        public string $id = '',
+        public string $name = '',
+        public string $type_id = '',
+        public string $place_holder = '',
+        public string $reference = '',
+        public string $mandatory = '',
+        public string $data_type = '',
+    ) {}
 }

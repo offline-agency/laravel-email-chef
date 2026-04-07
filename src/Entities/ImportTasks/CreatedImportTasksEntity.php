@@ -4,15 +4,19 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\ImportTasks;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CreatedImportTasksEntity extends AbstractEntity
+final readonly class CreatedImportTasksEntity
 {
-    public string $id;
+    use Hydratable;
 
-    /** @var array<mixed> */
-    public array $validation_errors;
-
-    /** @var array<mixed> */
-    public array $validation_warnings;
+    /**
+     * @param array<mixed> $validation_errors
+     * @param array<mixed> $validation_warnings
+     */
+    public function __construct(
+        public string $id = '',
+        public array $validation_errors = [],
+        public array $validation_warnings = [],
+    ) {}
 }

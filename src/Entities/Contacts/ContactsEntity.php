@@ -4,24 +4,23 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Contacts;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class ContactsEntity extends AbstractEntity
+final readonly class ContactsEntity
 {
-    public string $id;
+    use Hydratable;
 
-    public string $list_id;
-
-    public string $name;
-
-    public string $type_id;
-
-    public string $place_holder;
-
-    /** @var array<mixed> */
-    public array $options;
-
-    public string $text;
-
-    public string $default_value;
+    /**
+     * @param array<mixed> $options
+     */
+    public function __construct(
+        public string $id = '',
+        public string $list_id = '',
+        public string $name = '',
+        public string $type_id = '',
+        public string $place_holder = '',
+        public array $options = [],
+        public string $text = '',
+        public string $default_value = '',
+    ) {}
 }

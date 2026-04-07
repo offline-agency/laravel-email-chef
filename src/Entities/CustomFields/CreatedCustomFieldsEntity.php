@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\CustomFields;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CreatedCustomFieldsEntity extends AbstractEntity
+final readonly class CreatedCustomFieldsEntity
 {
-    public string $status = '';
+    use Hydratable;
 
-    public string $custom_field_id = '';
+    public function __construct(
+        public string $status = '',
+        public string $custom_field_id = '',
+    ) {}
 }

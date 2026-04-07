@@ -4,9 +4,13 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Autoresponders;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CreateAutoresponder extends AbstractEntity
+final readonly class CreateAutoresponder
 {
-    public object $body;
+    use Hydratable;
+
+    public function __construct(
+        public ?object $body = null,
+    ) {}
 }

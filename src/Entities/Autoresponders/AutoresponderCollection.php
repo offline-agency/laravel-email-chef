@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Autoresponders;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class AutoresponderCollection extends AbstractEntity
+final readonly class AutoresponderCollection
 {
-    public string $id;
+    use Hydratable;
 
-    public string $name;
-
-    public string $trigger_id;
-
-    public string $active;
-
-    public string $hours_delay;
-
-    public mixed $sent;
-
-    public string $open;
-
-    public string $click;
-
-    public mixed $lists;
+    public function __construct(
+        public string $id = '',
+        public string $name = '',
+        public string $trigger_id = '',
+        public string $active = '',
+        public string $hours_delay = '',
+        public mixed $sent = null,
+        public string $open = '',
+        public string $click = '',
+        public mixed $lists = null,
+    ) {}
 }

@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Campaigns;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class CampaignCount extends AbstractEntity
+final readonly class CampaignCount
 {
-    public string $saved_draft_counter;
+    use Hydratable;
 
-    public string $sent_counter;
-
-    public string $scheduled_counter;
-
-    public string $archived_counter;
-
-    public string $failed_counter;
+    public function __construct(
+        public string $saved_draft_counter = '',
+        public string $sent_counter = '',
+        public string $scheduled_counter = '',
+        public string $archived_counter = '',
+        public string $failed_counter = '',
+    ) {}
 }

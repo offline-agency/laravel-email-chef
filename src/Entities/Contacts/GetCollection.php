@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace OfflineAgency\LaravelEmailChef\Entities\Contacts;
 
-use OfflineAgency\LaravelEmailChef\Entities\AbstractEntity;
+use OfflineAgency\LaravelEmailChef\Entities\Hydratable;
 
-class GetCollection extends AbstractEntity
+final readonly class GetCollection
 {
-    public string $status;
+    use Hydratable;
 
-    public string $email;
-
-    public string $firstname;
-
-    public string $lastname;
-
-    public ?string $ip;
+    public function __construct(
+        public string $status = '',
+        public string $email = '',
+        public string $firstname = '',
+        public string $lastname = '',
+        public ?string $ip = null,
+    ) {}
 }
