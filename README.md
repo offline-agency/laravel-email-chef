@@ -329,7 +329,8 @@ composer test                            # run all tests
 ./vendor/bin/pest --coverage             # with coverage report
 ./vendor/bin/pest --coverage --min=80    # enforce coverage gate
 composer analyse                         # static analysis (PHPStan level 6)
-./vendor/bin/pint                        # fix code style
+composer lint                            # fix code style
+composer lint:test                       # check code style (dry-run)
 ```
 
 ---
