@@ -92,11 +92,10 @@ class Api extends LaravelEmailChef
     private function waitThrottle(
         int $status,
     ): void {
-        match ($status) {
-            403     => usleep(config('email-chef.limits.403')),
-            429     => usleep(config('email-chef.limits.429')),
-            default => usleep(config('email-chef.limits.default')),
-        };
+        usleep((int) config(
+            'email-chef.limits.'.$status,
+            config('email-chef.limits.default'),
+        ));
     }
 
     private function parseResponse(Response $response): object {
