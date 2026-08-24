@@ -16,9 +16,9 @@ A Laravel package for the [EmailChef](https://emailchef.com) API — covering al
 
 | Dependency | Version |
 |---|---|
-| PHP | ^8.4 |
-| Laravel | ^12.0 \| ^13.0 |
-| orchestra/testbench (dev) | ^10.0 \| ^11.0 |
+| PHP | ^8.5 |
+| Laravel | ^13.0 |
+| orchestra/testbench (dev) | ^11.0 |
 
 ---
 
